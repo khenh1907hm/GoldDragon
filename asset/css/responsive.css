@@ -1,0 +1,191 @@
+@media (max-width: 1024px) {
+  .hero-text h1 {
+    font-size: 2.8rem;
+  }
+
+  .hero-text p {
+    font-size: 1.1rem;
+  }
+
+  .content-text {
+    max-width: 90%;
+  }
+
+  .main-footer .container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-logo {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 1rem 3%;
+  }
+
+  nav {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .hero {
+    flex-direction: column-reverse;
+    padding: 3%;
+    margin-top: 80px;
+  }
+
+  .hero-text {
+    padding: 1.5rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-model {
+    display: none;
+  }
+
+  .bubble {
+    display: none;
+  }
+
+  .slide {
+    width: calc(100vw / 3);
+  }
+
+  .member-section {
+    padding: 5%;
+  }
+
+  .glass-container {
+    padding: 1.5rem;
+  }
+
+  .member-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .member-name {
+    font-size: 1.3rem;
+  }
+
+  .contact-container {
+    grid-template-columns: 1fr;
+  }
+
+  .form-container {
+    padding: 2rem;
+  }
+
+  .teacher-avatar {
+    width: 100px;
+    height: 100px;
+    top: -50px;
+    right: 20px;
+  }
+
+  .map-container {
+    height: 400px;
+  }
+
+  .top-bar .container {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .support-item {
+    width: calc(33.33% - 1rem);
+    justify-content: center;
+  }
+
+  .main-footer .container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-logo,
+  .footer-links,
+  .footer-newsletter {
+    text-align: center;
+  }
+
+  .footer-logo img {
+    margin: 0 auto 1rem;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-text h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-text h4 {
+    font-size: 1rem;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+  }
+
+  .hero-text button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+    margin: 1.5rem 0;
+  }
+
+  .content-section {
+    padding: 3%;
+  }
+
+  .content-text {
+    padding: 1.5rem;
+  }
+
+  .glass-container {
+    padding: 1rem;
+  }
+
+  .member-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-section {
+    padding: 5%;
+  }
+
+  .form-container {
+    padding: 1.5rem;
+  }
+
+  .teacher-avatar {
+    width: 80px;
+    height: 80px;
+    top: -40px;
+    right: 15px;
+  }
+
+  .support-item {
+    width: calc(50% - 1rem);
+  }
+
+  .main-footer {
+    padding: 3rem 5%;
+  }
+}

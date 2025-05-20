@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Golden gragon kindergarter</title>
+  <link rel="stylesheet" href="asset/css/home.css">
+  <link rel="stylesheet" href="asset/css/responsive.css">
+  <link rel="stylesheet" href="asset/css/montessori.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+
+  <header>
+    <div class="logo">
+      <img src="./asset/img/logo.png" alt="Golden gragon kindergarter">
+    </div>
+    <nav>
+      <a href="#home">Trang chủ</a>
+      <a href="#tin-tuc">Tin tức</a>
+      <a href="#lich-hoc">Lịch học</a>
+      <a href="#thuc-don">Thực đơn</a>
+      <a href="#ban-tin">Bản tin</a>
+      <a href="#tuyen-sinh">Tuyển sinh</a>
+      <a href="#lien-he">Liên hệ</a>
+    </nav>
+  </header>
+
+  <!-- Add Mobile Menu Button -->
+  <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+  <!-- Add Mobile Menu -->
+  <div class="mobile-menu">
+    <a href="#home">Trang chủ</a>
+    <a href="#tin-tuc">Tin tức</a>
+    <a href="#lich-hoc">Lịch học</a>
+    <a href="#thuc-don">Thực đơn</a>
+    <a href="#ban-tin">Bản tin</a>
+    <a href="#tuyen-sinh">Tuyển sinh</a>
+    <a href="#lien-he">Liên hệ</a>
+  </div>
+
+  <!-- Hero Section -->  <div class="hero">
+    <div class="hero-text">
+      <h4 class="animate" data-animation="fade-in-left">Nơi nuôi dưỡng tài năng tương lai</h4>
+      <h1 class="animate" data-animation="fade-in-up delay-1">Welcome to Golden gragon kindergarter</h1>
+      <p class="animate" data-animation="fade-in-up delay-2">Chúng tôi cung cấp môi trường học tập an toàn, sáng tạo và đầy cảm hứng cho trẻ em từ 2-6 tuổi</p>
+      <button class="animate" data-animation="fade-in-up delay-3" onclick="alert('Đã nhấn nút!')">Tìm hiểu thêm</button>
+    </div>
+    <div class="hero-model">
+      <canvas id="glbCanvas"></canvas>
+    </div>
+  </div>
+  <!-- Activities Section -->
+  <div class="content-section">
+    <h2 class="section-title animate" data-animation="fade-in-up">Hoạt động của nhóm trẻ</h2>    <div class="slider-container animate" data-animation="scale-in">      
+      <div class="slider">
+        <!-- Original slides -->
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_1.jpg" alt="Hoạt động 1"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_2.jpg" alt="Hoạt động 2"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_3.jpg" alt="Hoạt động 3"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_4.jpg" alt="Hoạt động 4"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_5.jpg" alt="Hoạt động 5"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_6.jpg" alt="Hoạt động 6"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_7.jpg" alt="Hoạt động 7"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_8.jpg" alt="Hoạt động 8"></div>
+        <!-- Duplicate for seamless loop -->
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_1.jpg" alt="Hoạt động 1"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_2.jpg" alt="Hoạt động 2"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_3.jpg" alt="Hoạt động 3"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_4.jpg" alt="Hoạt động 4"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_5.jpg" alt="Hoạt động 5"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_6.jpg" alt="Hoạt động 6"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_7.jpg" alt="Hoạt động 7"></div>
+        <div class="slide animate" data-animation="fade-in-up"><img src="asset/img/reason_8.jpg" alt="Hoạt động 8"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Montessori Section -->
+  <div class="content-section montessori-section">
+    <h2 class="section-title animate" data-animation="fade-in-up">Con học được gì với</h2>
+    <h2 class="section-title pink animate" data-animation="fade-in-up delay-1">Phương pháp Montessori?</h2>    <div class="montessori-grid">
+      <div class="montessori-item animate" data-animation="fade-in-up">
+        <div class="montessori-image">
+          <img src="asset/img/reason_1.jpg" alt="Tinh thần tự lập">
+        </div>
+        <div class="montessori-content">
+          <h3>Tinh thần tự lập</h3>
+          <p>Trẻ tự do lựa chọn những hoạt động mình thích, cách thức mình trải nghiệm, khám phá theo đúng cá tính của bản thân. Trẻ cũng được học bài học thực tế như lau bàn bếp, gấp quần áo, rửa rau, củ, quả...</p>
+        </div>
+      </div>
+      <div class="montessori-divider-vertical"></div>
+      <div class="montessori-item animate" data-animation="fade-in-up" data-delay="200">
+        <div class="montessori-image">
+          <img src="asset/img/reason_2.jpg" alt="Kỹ năng giải quyết vấn đề">
+        </div>
+        <div class="montessori-content">
+          <h3>Kỹ năng tự giải quyết vấn đề</h3>
+          <p>Phương pháp Montessori kích thích trẻ tự nói ra vấn đề của mình rồi mang đến cho trẻ những lựa chọn. Ví dụ: Khi trẻ tranh giành lẫn nhau, giáo viên sẽ không can thiệp ngay mà để trẻ tự thương lượng.</p>
+        </div>
+      </div>
+      <div class="montessori-divider-horizontal"></div>
+      <div class="montessori-item animate" data-animation="fade-in-up" data-delay="400">
+        <div class="montessori-image">
+          <img src="asset/img/reason_3.jpg" alt="Kỹ năng hợp tác">
+        </div>
+        <div class="montessori-content">
+          <h3>Kỹ năng hợp tác linh hoạt</h3>
+          <p>Trẻ được gắn kết với môi trường, bạn bè bằng những hoạt động vui chơi, học tập tự do, hoạt động nhóm; được khơi gợi tinh thần đoàn kết và giúp đỡ lẫn nhau để đạt được những thành quả tốt nhất.</p>
+        </div>
+      </div>
+      <div class="montessori-divider-vertical"></div>
+      <div class="montessori-item animate" data-animation="fade-in-up" data-delay="600">
+        <div class="montessori-image">
+          <img src="asset/img/reason_4.jpg" alt="Kỹ năng xây dựng mối quan hệ">
+        </div>
+        <div class="montessori-content">
+          <h3>Kỹ năng xây dựng mối quan hệ</h3>
+          <p>Mỗi trẻ đều được nuôi dưỡng tâm hồn từng ngày, bồi đắp lòng nhân ái cho mỗi trẻ. Montessori tôn trọng sự khác biệt của trẻ, từ đó, giáo dục trẻ cách tôn trọng sự riêng biệt của mọi người xung quanh.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Teacher Section -->
+  <div class="member-section">
+    <div class="glass-container">
+      <h2 class="section-title animate" data-animation="fade-in-up">Đội ngũ giáo viên</h2>      <div class="member-grid">
+        <div class="member-card animate" data-animation="fade-in-left">
+          <div class="member-image-container">
+            <img src="asset/img/teacher1.jpg" alt="Giáo viên 1">
+          </div>
+          <div class="member-details">
+            <h3 class="member-name">Nguyễn Thị Lanh</h3>
+            <span class="member-role">Giáo viên chủ nhiệm</span>
+            <p class="member-bio">Luôn đặt tình yêu với trẻ lên trên hết, đảm bảo mỗi học sinh đều nhận được sự hỗ trợ và phát triển tốt nhất.</p>
+            <div class="social-links">
+              <a href="#" class="social-link">Xem thông tin</a>
+            </div>
+          </div>
+        </div>
+        <div class="member-card animate" data-animation="fade-in-up">
+          <div class="member-image-container">
+            <img src="asset/img/teacher2.jpg" alt="Giáo viên 2">
+          </div>
+          <div class="member-details">
+            <h3 class="member-name">Trần Thu Hương</h3>
+            <span class="member-role">Giáo viên âm nhạc</span>
+            <p class="member-bio">Với kinh nghiệm 5 năm giảng dạy âm nhạc cho trẻ em, cô luôn tạo không khí vui tươi và sáng tạo trong lớp học.</p>
+            <div class="social-links">
+              <a href="#" class="social-link">Xem thông tin</a>
+            </div>
+          </div>
+        </div>
+        <div class="member-card animate" data-animation="fade-in-right">
+          <div class="member-image-container">
+            <img src="asset/img/teacher3.jpg" alt="Giáo viên 3">
+          </div>
+          <div class="member-details">
+            <h3 class="member-name">Lê Minh Tâm</h3>
+            <span class="member-role">Giáo viên mỹ thuật</span>
+            <p class="member-bio">Chuyên gia về nghệ thuật tạo hình, giúp trẻ phát triển óc sáng tạo và thẩm mỹ từ những năm đầu đời.</p>
+            <div class="social-links">
+              <a href="#" class="social-link">Xem thông tin</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Contact Section -->
+  <div class="contact-section" id="lien-he">
+    <h2 class="section-title animate" data-animation="fade-in-up">Liên hệ đăng ký</h2>
+    <div class="contact-container">
+      <div class="form-container animate" data-animation="fade-in-left">
+        <img src="asset/img/logo.png" alt="Teacher Avatar" class="teacher-avatar">
+        <form id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <input type="text" id="childName" name="childName" placeholder=" " required>
+            <label for="childName">Họ tên bé</label>
+          </div>
+          <div class="form-group">
+            <input type="text" id="nickname" name="nickname" placeholder=" " required>
+            <label for="nickname">Tên thường gọi</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="age" name="age" min="0" max="6" placeholder=" " required>
+            <label for="age">Tuổi</label>
+          </div>
+          <div class="form-group">
+            <input type="text" id="parentName" name="parentName" placeholder=" " required>
+            <label for="parentName">Họ tên phụ huynh</label>
+          </div>
+          <div class="form-group">
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder=" " required>
+            <label for="phone">Số điện thoại</label>
+          </div>
+          <div class="form-group">
+            <input type="text" id="address" name="address" placeholder=" " required>
+            <label for="address">Địa chỉ</label>
+          </div>
+          <div class="form-group">
+            <textarea id="message" name="message" rows="4" placeholder=" " required></textarea>
+            <label for="message">Nội dung</label>
+          </div>
+          <button type="submit" class="submit-btn">Gửi thông tin</button>
+        </form>
+      </div>      <div class="map-container animate" data-animation="fade-in-right">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.1708777071103!2d106.62007261032092!3d10.87460455733101!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752b32e08d6d5d%3A0xb86bdb4c70012465!2zTeG6p20gTm9uIFLhu5NuZyBWw6BuZw!5e0!3m2!1svi!2s!4v1747401055450!5m2!1svi!2s" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="top-bar destop">
+      <div class="container">
+        <div class="support-item animate" data-animation="fade-in-up delay-1">
+          <i class="fas fa-utensils"></i>
+          <span>Ăn sáng</span>
+        </div>
+        <div class="support-item">
+          <i class="far fa-clock"></i>
+          <span>Đón muộn</span>
+        </div>
+        <div class="support-item">
+          <i class="far fa-calendar-alt"></i>
+          <span>Trông thứ 7</span>
+        </div>
+        <div class="support-item">
+          <i class="fas fa-bus"></i>
+          <span>Xe bus đưa đón</span>
+        </div>
+        <div class="support-item">
+          <i class="fas fa-phone-alt"></i>
+          <span>Hỗ trợ 24/7</span>
+        </div>
+        <div class="support-item">
+          <i class="fas fa-heart"></i>
+          <span>Chăm sóc chu đáo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-footer">
+      <div class="container">
+        <div class="footer-logo">
+          <img src="./asset/img/logo.png" alt="Golden gragon kindergarter">
+          <div class="address">
+            <p><strong>Golden gragon kindergarter</strong> - Nơi nuôi dưỡng tài năng tương lai</p>
+            <p><i class="fas fa-map-marker-alt"></i> 15 Đông Đô, Thị trấn Liên Nghĩa, Đức Trọng, Lâm Đồng</p>
+            <p><i class="fas fa-phone"></i> 0839395292</p>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h3>Liên kết nhanh</h3>
+          <ul>
+            <li><a href="#home">Trang chủ</a></li>
+            <li><a href="#gioi-thieu">Giới thiệu</a></li>
+            <li><a href="#chuong-trinh">Chương trình học</a></li>
+            <li><a href="#lien-he">Liên hệ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-newsletter">
+          <h3>Đăng ký nhận tin</h3>
+          <form>
+            <input type="email" placeholder="Email của bạn">
+            <button type="submit">Đăng ký</button>
+          </form>
+          <div class="social-media">
+            <strong>Mạng xã hội</strong>
+            <div class="social-icons">
+              <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <hr class="footer-divider">
+      <div class="container">
+        <p>&copy; 2025 Bản quyền thuộc về Trường mầm non Golden gragon kindergarter | Thiết kế bởi Minh Lê</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.152.2/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const canvas = document.getElementById('glbCanvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf0f0f0);
+
+    const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    camera.position.set(0, 0.5, 3);
+    camera.lookAt(0, 0.5, 0);
+
+    const mainLight = new THREE.DirectionalLight(0xffffff, 1);
+    mainLight.position.set(0, 1, 2);
+    scene.add(mainLight);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    let model;
+    const loader = new GLTFLoader();
+    loader.load('boy.glb', function (gltf) {
+      model = gltf.scene;
+      model.rotation.y = Math.PI/2;
+      const scale = 3;
+      model.scale.set(scale, scale, scale);
+      model.position.y = 0;
+      model.position.x = 0;
+      scene.add(model);
+      targetRotation = Math.PI;
+      animate();
+    }, undefined, function (error) {
+      console.error('Lỗi khi tải mô hình:', error);
+    });
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, 0.5, 0);
+    controls.minPolarAngle = Math.PI/3;
+    controls.maxPolarAngle = Math.PI/2;
+    controls.minDistance = 1.5;
+    controls.maxDistance = 5;
+
+    let lastScrollTop = 0;
+    let targetRotation = Math.PI;
+
+    const heroSection = document.querySelector('.hero');
+    window.addEventListener('scroll', function() {
+      if (!model) return;
+      
+      const heroRect = heroSection.getBoundingClientRect();
+      if (heroRect.bottom < 0 || heroRect.top > window.innerHeight) return;
+      
+      const st = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollInHero = Math.max(0, Math.min(heroRect.height, -heroRect.top));
+      const scrollProgress = scrollInHero / heroRect.height;
+      
+      if (st > lastScrollTop) {
+        targetRotation = Math.PI + (Math.PI/6 * scrollProgress);
+      } else {
+        targetRotation = Math.PI - (Math.PI/6 * scrollProgress);
+      }
+      
+      lastScrollTop = st <= 0 ? 0 : st;
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      if (model) {
+        model.rotation.y += (targetRotation - model.rotation.y) * 0.05;
+      }
+      
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', onWindowResize, false);
+
+    function onWindowResize() {
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    }
+  </script>
+  <script>
+    function toggleMobileMenu() {
+      const mobileMenu = document.querySelector('.mobile-menu');
+      mobileMenu.classList.toggle('active');
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData.entries());
+      console.log('Form data:', data);
+      alert('Cảm ơn bạn đã gửi thông tin! Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.');
+      event.target.reset();
+    }
+
+    document.querySelectorAll('.form-group input, .form-group textarea').forEach(field => {
+      field.addEventListener('focus', () => {
+        field.previousElementSibling.style.transform = 'translateY(-25px)';
+      });
+      
+      field.addEventListener('blur', () => {
+        if (!field.value) {
+          field.previousElementSibling.style.transform = 'translateY(0)';
+        }
+      });
+    });
+  </script>
+  <script src="asset/js/animations.js"></script>
+</body>
+</html>
