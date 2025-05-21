@@ -1,0 +1,72 @@
+<?php
+ob_start();
+?>
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 mb-0">Student Management</h2>        <a href="index.php?page=students&action=create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Student
+        </a>
+    </div>
+
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php 
+                echo $_SESSION['success'];
+                unset($_SESSION['success']);
+            ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <div class="card dashboard-card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Nick Name</th>
+                            <th>Age</th>
+                            <th>Parent Name</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $student): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($student['id']); ?></td>
+                                <td><?php echo htmlspecialchars($student['full_name']); ?></td>
+                                <td><?php echo htmlspecialchars($student['nick_name']); ?></td>
+                                <td><?php echo htmlspecialchars($student['age']); ?></td>
+                                <td><?php echo htmlspecialchars($student['parent_name']); ?></td>
+                                <td><?php echo htmlspecialchars($student['phone']); ?></td>
+                                <td>
+                                    <div class="btn-group" role="group">                                        <a href="index.php?page=students&action=edit&id=<?php echo $student['id']; ?>" 
+                                           class="btn btn-sm btn-outline-primary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                onclick="confirmDelete(<?php echo $student['id']; ?>)" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(id) {
+    if (confirm('Are you sure you want to delete this student?')) {
+        window.location.href = 'index.php?page=students&action=delete&id=' + id;
+    }
+}
+</script>

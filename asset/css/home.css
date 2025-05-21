@@ -182,6 +182,19 @@ nav a:hover {
   position: relative;
 }
 
+.hero::before {
+  content: '';
+  position: fixed;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle at center, rgba(255, 182, 193, 0.1), rgba(173, 216, 230, 0.1));
+  border-radius: 50%;
+  z-index: -1;
+  animation: float 20s infinite ease-in-out;
+}
+
 .hero-text {
   flex: 1;
   padding-right: 5%;
@@ -809,6 +822,25 @@ canvas {
   padding: 5rem 10%;
 }
 
+.montessori-section::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 800px;
+  height: 600px;
+  background-image: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="rgba(0,0,0,0.1)"/></svg>');
+  background-size: 20px 20px;
+  opacity: 0.1;
+  z-index: 0;
+  transform: rotate(-5deg);
+  transition: transform 0.3s ease;
+}
+
+.montessori-section:hover::before {
+  transform: rotate(0deg);
+}
+
 .montessori-section .section-title {
   margin-bottom: 0;
 }
@@ -863,7 +895,6 @@ canvas {
 
 .montessori-content {
   flex: 1;
-  padding: 2rem;
 }
 
 .montessori-content h3 {
