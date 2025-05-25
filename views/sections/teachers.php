@@ -4,7 +4,7 @@
         <div class="member-grid">
             <div class="member-card animate" data-animation="fade-in-left">
                 <div class="member-image-container">
-                    <img src="/asset/img/teacher1.jpg" alt="Giáo viên 1">
+                    <img src="/3D_web_test/asset//img/teacher1.jpg" alt="Giáo viên 1">
                 </div>
                 <div class="member-details">
                     <h3 class="member-name">Nguyễn Thị Lanh</h3>
@@ -17,7 +17,7 @@
             </div>
             <div class="member-card animate" data-animation="fade-in-up">
                 <div class="member-image-container">
-                    <img src="/asset/img/teacher2.jpg" alt="Giáo viên 2">
+                    <img src="/3D_web_test/asset/img/teacher2.jpg" alt="Giáo viên 2">
                 </div>
                 <div class="member-details">
                     <h3 class="member-name">Trần Thu Hương</h3>
@@ -30,7 +30,7 @@
             </div>
             <div class="member-card animate" data-animation="fade-in-right">
                 <div class="member-image-container">
-                    <img src="/asset/img/teacher3.jpg" alt="Giáo viên 3">
+                    <img src="/3D_web_test/asset/img/teacher3.jpg" alt="Giáo viên 3">
                 </div>
                 <div class="member-details">
                     <h3 class="member-name">Lê Minh Tâm</h3>

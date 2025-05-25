@@ -61,6 +61,3 @@ ob_start();
 </div>
 
 <?php
-$pageContent = ob_get_clean();
-$pageTitle = 'Edit Student';
-require_once __DIR__ . '/../layout.php';

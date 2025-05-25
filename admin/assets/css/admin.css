@@ -135,7 +135,6 @@ body {
     font-size: 0.85rem;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
 }

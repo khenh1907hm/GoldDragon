@@ -116,4 +116,15 @@ class Student {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row['total'];
     }
+
+    public function getCount() {
+        return $this->conn->query("SELECT COUNT(*) FROM students");
+    }
+    public function getPaginated($limit, $offset) {
+        $stmt = $this->conn->prepare("SELECT * FROM students ORDER BY id DESC LIMIT :limit OFFSET :offset");
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
 }

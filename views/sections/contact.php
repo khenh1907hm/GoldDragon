@@ -2,7 +2,7 @@
     <h2 class="section-title animate" data-animation="fade-in-up">Liên hệ đăng ký</h2>
     <div class="contact-container">
         <div class="form-container animate" data-animation="fade-in-left">
-            <img src="/asset/img/logo.png" alt="Teacher Avatar" class="teacher-avatar">
+            <img src="/3D_web_test/asset/img/logo.png" alt="Teacher Avatar" class="teacher-avatar">
             <form id="contactForm" onsubmit="handleRegistration(event)">
                 <div class="form-group">
                     <input type="text" id="student_name" name="student_name" placeholder=" " required>

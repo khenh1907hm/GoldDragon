@@ -58,6 +58,30 @@ ob_start();
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                <!-- Pagination -->
+<?php if ($totalPages > 1): ?>
+<nav aria-label="Student pagination">
+    <ul class="pagination justify-content-center mt-4">
+        <!-- Prev button -->
+        <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
+            <a class="page-link" href="index.php?page=students&page_num=<?php echo $page - 1; ?>">Previous</a>
+        </li>
+
+        <!-- Page numbers -->
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                <a class="page-link" href="index.php?page=students&page_num=<?php echo $i; ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
+
+        <!-- Next button -->
+        <li class="page-item <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?>">
+            <a class="page-link" href="index.php?page=students&page_num=<?php echo $page + 1; ?>">Next</a>
+        </li>
+    </ul>
+</nav>
+<?php endif; ?>
+
             </div>
         </div>
     </div>

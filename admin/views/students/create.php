@@ -53,7 +53,4 @@ ob_start();
     </div>
 </div>
 
-<?php
-$pageContent = ob_get_clean();
-$pageTitle = 'Add New Student';
-require_once __DIR__ . '/../layout.php';
+
