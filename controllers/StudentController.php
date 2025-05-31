@@ -22,15 +22,6 @@ class StudentController {
         $result = $this->student->getAll();
         return $result->rowCount();
     }
-    // public function index() {
-    //     $result = $this->student->getAll();
-    //     $students = $result->fetchAll(PDO::FETCH_ASSOC);
-    //     ob_start();
-    //     require $this->viewPath . 'index.php';
-    //     $content = ob_get_clean();
-    //     $_SESSION['page_title'] = "Students";
-    //     require_once dirname(__DIR__) . '/admin/views/layout.php';
-    // }
 
     public function index() {
     $limit = 10; // số bản ghi mỗi trang

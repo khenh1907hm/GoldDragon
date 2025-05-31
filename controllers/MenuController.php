@@ -3,22 +3,39 @@ require_once '../models/Menu.php';
 require_once '../config/database.php';
 
 class MenuController {
-    private $menu;    public function __construct() {
+    private $menu;   
+    private $viewPath;
+    private $adminPath;
+
+
+    public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $database = Database::getInstance();
         $db = $database->connect();
         $this->menu = new Menu($db);
+        $this->adminPath = dirname(__DIR__) . '/admin/';
+        $this->viewPath = $this->adminPath . 'views/menu/';
     }
 
     // List all menus
     public function index() {
         $result = $this->menu->read();
         $menus = $result->fetchAll(PDO::FETCH_ASSOC);
-        require_once '../views/menus/index.php';
+        ob_start();
+        require $this->viewPath . 'index.php';
+        $content = ob_get_clean();
+        $_SESSION['page_title'] = "Menus";
+        require dirname(__DIR__) . '/admin/views/layout.php';
     }
 
     // Show create form
     public function create() {
-        require_once '../views/menus/create.php';
+        require dirname(__DIR__) . '/admin/views/layout.php';
+        require $this->viewPath . 'create.php';
+        
+        // require_once '../views/menus/create.php';
     }
 
     // Store new menu
@@ -34,7 +51,7 @@ class MenuController {
             ];
 
             if ($this->menu->create($menuData)) {
-                header('Location: index.php?action=menus');
+                header('Location: index.php?page=menus');
             } else {
                 echo "Có lỗi xảy ra";
             }
@@ -44,7 +61,8 @@ class MenuController {
     // Show edit form
     public function edit($id) {
         $menu = $this->menu->readOne($id);
-        require_once '../views/menus/edit.php';
+        require dirname(__DIR__) . '/admin/views/layout.php';
+        require $this->viewPath . 'edit.php';
     }
 
     // Update menu
@@ -60,7 +78,7 @@ class MenuController {
             ];
 
             if ($this->menu->update($id, $menuData)) {
-                header('Location: index.php?action=menus');
+                header('Location: index.php?page=menus');
             } else {
                 echo "Có lỗi xảy ra";
             }

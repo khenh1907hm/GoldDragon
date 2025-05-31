@@ -8,23 +8,23 @@ class Post {
     }
 
     // Create Post
-    public function create($title, $content) {
-        $query = "INSERT INTO " . $this->table . " (title, content) VALUES (:title, :content)";
-        $stmt = $this->conn->prepare($query);
-        
-        // Clean data
-        $title = htmlspecialchars(strip_tags($title));
-        $content = htmlspecialchars(strip_tags($content));
+  public function create($title, $content) {
+    $query = "INSERT INTO " . $this->table . " (title, content) VALUES (:title, :content)";
+    $stmt = $this->conn->prepare($query);
 
-        // Bind data
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':content', $content);
+    // Clean title ONLY (không clean content)
+    $title = htmlspecialchars(strip_tags($title));
 
-        if($stmt->execute()) {
-            return true;
-        }
-        return false;
-    }
+    // Không nên strip_tags hoặc htmlspecialchars với content vì content là HTML (TinyMCE)
+    // $content = htmlspecialchars(strip_tags($content)); // ❌ Xoá dòng này
+
+    // Bind data
+    $stmt->bindParam(':title', $title);
+    $stmt->bindParam(':content', $content);
+
+    return $stmt->execute();
+}
+
 
     // Read all posts
     public function read() {
@@ -52,8 +52,8 @@ class Post {
         
         // Clean data
         $title = htmlspecialchars(strip_tags($title));
-        $content = htmlspecialchars(strip_tags($content));
-        
+        // $content = htmlspecialchars(strip_tags($content));       
+        $content = $_POST['content'];
         // Bind data
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':title', $title);

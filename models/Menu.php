@@ -6,7 +6,21 @@ class Menu {
     public function __construct($db) {
         $this->conn = $db;
     }
+    public function read() {
+        $query = "SELECT * FROM " . $this->table . " ORDER BY created_at DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
 
+    // Read single menu
+    public function readOne($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     // Create Menu
     public function create($data) {
         $query = "INSERT INTO " . $this->table . " 
@@ -37,24 +51,6 @@ class Menu {
         }
         return false;
     }
-
-    // Read all menus
-    public function read() {
-        $query = "SELECT * FROM " . $this->table . " ORDER BY created_at DESC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt;
-    }
-
-    // Read single menu
-    public function readOne($id) {
-        $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
     // Update menu
     public function update($id, $data) {
         $query = "UPDATE " . $this->table . " 

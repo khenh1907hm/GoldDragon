@@ -5,7 +5,7 @@
             <div class="card-body">
                 <h5 class="card-title">Total Posts</h5>
                 <p class="card-text"><?php echo $totalPosts; ?></p>
-                <a href="index.php?action=posts" class="btn">Manage Posts</a>
+                <a href="index.php?page=posts" class="btn">Manage Posts</a>
                 <div class="icon-bubble">
                     <i class="fas fa-newspaper"></i>
                 </div>
@@ -17,7 +17,7 @@
             <div class="card-body">
                 <h5 class="card-title">Menu Items</h5>
                 <p class="card-text"><?php echo $totalMenus; ?></p>
-                <a href="index.php?action=menus" class="btn">Manage Menus</a>
+                <a href="index.php?page=menus" class="btn">Manage Menus</a>
                 <div class="icon-bubble">
                     <i class="fas fa-utensils"></i>
                 </div>
@@ -40,7 +40,7 @@
             <div class="card-body">
                 <h5 class="card-title">Registrations</h5>
                 <p class="card-text display-4"><?php echo $totalRegistrations; ?></p>
-                <a href="index.php?action=registrations" class="btn btn-light">View Registrations</a>
+                <a href="index.php?page=registrations" class="btn btn-light">View Registrations</a>
             </div>
         </div>
     </div>
