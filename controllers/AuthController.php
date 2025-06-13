@@ -1,20 +1,18 @@
 <?php
 require_once '../models/User.php';
-require_once '../config/database.php';
+require_once __DIR__ . '/../includes/Database.php';
 
 class AuthController {
     private $user;
-    private $db;    public function __construct() {
+    private $db;
+
+    public function __construct() {
         try {
-            $database = Database::getInstance();
-            $this->db = $database->connect();
-            if (!$this->db) {
-                throw new Exception('Database connection failed');
-            }
+            $this->db = Database::getInstance()->getConnection();
             $this->user = new User($this->db);
         } catch (Exception $e) {
-            error_log('AuthController initialization error: ' . $e->getMessage());
-            throw $e;
+            error_log("AuthController Error: " . $e->getMessage());
+            throw new Exception("Failed to initialize controller");
         }
     }
 

@@ -2,7 +2,26 @@
     <h2 class="section-title animate" data-animation="fade-in-up">Liên hệ đăng ký</h2>
     <div class="contact-container">
         <div class="form-container animate" data-animation="fade-in-left">
-            <img src="/3D_web_test/asset/img/logo.png" alt="Teacher Avatar" class="teacher-avatar">
+            <img src="/RongVang/asset/img/logo.png" alt="Teacher Avatar" class="teacher-avatar">
+            <div id="form-message" class="alert" style="display: none;"></div>
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success">
+                    <?php 
+                    echo $_SESSION['success'];
+                    unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger">
+                    <?php 
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php endif; ?>
+            
             <form id="contactForm" onsubmit="handleRegistration(event)">
                 <div class="form-group">
                     <input type="text" id="student_name" name="student_name" placeholder=" " required>
@@ -44,29 +63,88 @@
 <script>
 async function handleRegistration(event) {
     event.preventDefault();
+    console.log('Form submission started');
+    
     const form = event.target;
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    const submitBtn = form.querySelector('.submit-btn');
+    const messageDiv = document.getElementById('form-message');
+    
+    // Debug: Log form data
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
     
     try {
-        const response = await fetch('/api/register', {
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang gửi...';
+        
+        console.log('Sending request to /RongVang/api/register');
+        const response = await fetch('/RongVang/api/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Accept': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: formData
         });
         
-        const result = await response.json();
+        console.log('Response received:', response);
         
-        if (result.status === 'success') {
-            alert('Cảm ơn bạn đã gửi thông tin! Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.');
+        // Get response text first
+        const responseText = await response.text();
+        console.log('Response text:', responseText);
+        
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch (e) {
+            console.error('Error parsing JSON:', e);
+            throw new Error('Invalid server response');
+        }
+        
+        console.log('Response data:', result);
+        
+        // Show message
+        messageDiv.style.display = 'block';
+        if (result.success) {
+            messageDiv.className = 'alert alert-success';
+            messageDiv.textContent = result.message || 'Cảm ơn bạn đã gửi thông tin! Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.';
             form.reset();
         } else {
-            alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+            messageDiv.className = 'alert alert-danger';
+            messageDiv.textContent = result.message || 'Có lỗi xảy ra, vui lòng thử lại sau.';
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+        messageDiv.style.display = 'block';
+        messageDiv.className = 'alert alert-danger';
+        messageDiv.textContent = 'Có lỗi xảy ra, vui lòng thử lại sau.';
+    } finally {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Gửi thông tin';
     }
 }
+</script>
+
+<style>
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+</style>

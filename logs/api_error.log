@@ -1,0 +1,28 @@
+[08-Jun-2025 15:34:43 Europe/Berlin] API Request: /RongVang/api/register
+[08-Jun-2025 15:34:43 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => bé
+    [age] => 2
+    [parent_name] => ád
+    [phone] => 0839993935
+    [address] => 1999
+    [content] => sadsda
+)
+
+[08-Jun-2025 15:34:43 Europe/Berlin] Database connection successful
+[08-Jun-2025 15:34:43 Europe/Berlin] Mailer initialized successfully
+[08-Jun-2025 15:34:43 Europe/Berlin] Received POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => bé
+    [age] => 2
+    [parent_name] => ád
+    [phone] => 0839993935
+    [address] => 1999
+    [content] => sadsda
+)
+
+[08-Jun-2025 15:34:43 Europe/Berlin] Preparing to send registration notification email
+[08-Jun-2025 15:34:47 Europe/Berlin] Send Email Error: SMTP Error: Could not authenticate.
+[08-Jun-2025 15:34:47 Europe/Berlin] Email sending failed: Failed to send email notification

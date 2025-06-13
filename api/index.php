@@ -1,64 +1,74 @@
 <?php
-// Default API response structure
-header('Content-Type: application/json');
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../logs/api_error.log');
 
-function sendResponse($status, $message, $data = null) {
-    echo json_encode([
-        'status' => $status,
-        'message' => $message,
-        'data' => $data
-    ]);
-    exit;
+// Set headers
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
 
-// Get request method and path
-$method = $_SERVER['REQUEST_METHOD'];
-$request = $_SERVER['REQUEST_URI'];
+// Custom error handler
+function handleError($errno, $errstr, $errfile, $errline) {
+    error_log("Error [$errno] $errstr on line $errline in file $errfile");
+    echo json_encode([
+        'success' => false,
+        'message' => 'Internal server error',
+        'debug' => $errstr
+    ]);
+    exit();
+}
 
-// API Routes
-if (strpos($request, '/api/') === 0) {
-    $path = substr($request, 5);
+// Custom exception handler
+function handleException($e) {
+    error_log("Exception: " . $e->getMessage() . "\n" . $e->getTraceAsString());
+    echo json_encode([
+        'success' => false,
+        'message' => 'Internal server error',
+        'debug' => $e->getMessage()
+    ]);
+    exit();
+}
+
+// Set error handlers
+set_error_handler('handleError');
+set_exception_handler('handleException');
+
+try {
+    // Get the request path
+    $request_uri = $_SERVER['REQUEST_URI'];
+    $base_path = '/RongVang/api/';
+    $endpoint = str_replace($base_path, '', $request_uri);
     
-    switch ($path) {
+    // Log the request
+    error_log("API Request: " . $request_uri);
+    error_log("POST data: " . print_r($_POST, true));
+
+    // Route the request
+    switch ($endpoint) {
         case 'register':
-            if ($method === 'POST') {
-                require_once '../controllers/RegistrationController.php';
-                $controller = new RegistrationController();
-                $controller->register();
-            } else {
-                sendResponse('error', 'Method not allowed', null);
-            }
-            break;
-            
-        case 'posts':
-            require_once '../controllers/PostController.php';
-            $controller = new PostController();
-            
-            switch ($method) {
-                case 'GET':
-                    $result = $controller->index();
-                    sendResponse('success', 'Posts retrieved successfully', $result);
-                    break;
-                // Add other methods as needed
-            }
-            break;
-            
-        case 'menus':
-            require_once '../controllers/MenuController.php';
-            $controller = new MenuController();
-            
-            switch ($method) {
-                case 'GET':
-                    $result = $controller->index();
-                    sendResponse('success', 'Menus retrieved successfully', $result);
-                    break;
-                // Add other methods as needed
-            }
+            require_once __DIR__ . '/../controllers/RegistrationController.php';
+            $controller = new RegistrationController();
+            $controller->register();
             break;
             
         default:
-            sendResponse('error', 'Endpoint not found', null);
+            throw new Exception('Invalid endpoint');
     }
-} else {
-    sendResponse('error', 'Invalid API request', null);
+} catch (Exception $e) {
+    error_log("API Error: " . $e->getMessage() . "\n" . $e->getTraceAsString());
+    echo json_encode([
+        'success' => false,
+        'message' => 'Internal server error',
+        'debug' => $e->getMessage()
+    ]);
 }

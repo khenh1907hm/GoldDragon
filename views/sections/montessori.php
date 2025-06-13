@@ -5,7 +5,7 @@
     <div class="montessori-grid">
         <div class="montessori-item animate" data-animation="fade-in-up">
             <div class="montessori-image">
-                <img src="/3D_web_test/asset/img/reason_1.jpg" alt="Tinh thần tự lập">
+                <img src="/RongVang/asset/img/reason_1.jpg" alt="Tinh thần tự lập">
             </div>
             <div class="montessori-content">
                 <h3>Tinh thần tự lập</h3>
@@ -15,7 +15,7 @@
         <div class="montessori-divider-vertical"></div>
         <div class="montessori-item animate" data-animation="fade-in-up" data-delay="200">
             <div class="montessori-image">
-                <img src="/3D_web_test/asset/img/reason_2.jpg" alt="Kỹ năng giải quyết vấn đề">
+                <img src="/RongVang/asset/img/reason_2.jpg" alt="Kỹ năng giải quyết vấn đề">
             </div>
             <div class="montessori-content">
                 <h3>Kỹ năng tự giải quyết vấn đề</h3>
@@ -25,7 +25,7 @@
         <div class="montessori-divider-horizontal"></div>
         <div class="montessori-item animate" data-animation="fade-in-up" data-delay="400">
             <div class="montessori-image">
-                <img src="/3D_web_test/asset/img/reason_3.jpg" alt="Kỹ năng hợp tác">
+                <img src="/RongVang/asset/img/reason_3.jpg" alt="Kỹ năng hợp tác">
             </div>
             <div class="montessori-content">
                 <h3>Kỹ năng hợp tác linh hoạt</h3>
@@ -35,7 +35,7 @@
         <div class="montessori-divider-vertical"></div>
         <div class="montessori-item animate" data-animation="fade-in-up" data-delay="600">
             <div class="montessori-image">
-                <img src="/3D_web_test/asset/img/reason_4.jpg" alt="Kỹ năng xây dựng mối quan hệ">
+                <img src="/RongVang/asset/img/reason_4.jpg" alt="Kỹ năng xây dựng mối quan hệ">
             </div>
             <div class="montessori-content">
                 <h3>Kỹ năng xây dựng mối quan hệ</h3>

@@ -10,13 +10,13 @@ ini_set('display_errors', 1);
 define('ROOT_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR);
 set_include_path(get_include_path() . PATH_SEPARATOR . ROOT_PATH);
 
-// Load controllers
-require_once 'config/database.php';
-require_once 'controllers/AuthController.php';
-require_once 'controllers/PostController.php';
-require_once 'controllers/MenuController.php';
-require_once 'controllers/StudentController.php';
-require_once 'controllers/RegistrationController.php';
+// Include required files
+require_once __DIR__ . '/../includes/Database.php';
+require_once __DIR__ . '/../controllers/AuthController.php';
+require_once __DIR__ . '/../controllers/PostController.php';
+require_once __DIR__ . '/../controllers/MenuController.php';
+require_once __DIR__ . '/../controllers/StudentController.php';
+require_once __DIR__ . '/../controllers/RegistrationController.php';
 
 try {
     // Initialize auth controller
@@ -35,7 +35,7 @@ try {
         exit();
     }
 
-    // Initialize other controllers after authentication
+    // Initialize controllers
     $postController = new PostController();
     $menuController = new MenuController();
     $studentController = new StudentController();
@@ -43,100 +43,91 @@ try {
 
     // Get the page and action from URL
     $page = $_GET['page'] ?? 'dashboard';
-    $action = $_GET['action'] ?? 'index';    // Prepare data for dashboard
-    if ($page === 'dashboard') {
-        $totalPosts = method_exists($postController, 'count') ? $postController->count() : 0;
-        $totalMenus = method_exists($menuController, 'count') ? $menuController->count() : 0;
-        $totalStudents = method_exists($studentController, 'count') ? $studentController->count() : 0;
-        $totalRegistrations = method_exists($registrationController, 'count') ? $registrationController->count() : 0;
-        
-        $recentPosts = $postController->getRecent(5);
-        $recentRegistrations = $registrationController->getRecent(5);
+    $action = $_GET['action'] ?? 'index';
+    $operation = $_GET['op'] ?? '';
 
-        require_once 'views/dashboard.php';
-    }
-    // Route the request
-    else {
-        switch ($page) {
-            case 'students':
-                switch ($action) {
-                    case 'index':
-                        $studentController->index();
-                        break;
-                    case 'create':
-                        $studentController->create();
-                        break;
-                    case 'store':
-                        $studentController->store();
-                        break;
-                    case 'edit':
-                        $studentController->edit($_GET['id']);
-                        break;
-                    case 'update':
-                        $studentController->update($_GET['id']);
-                        break;
-                    case 'delete':
-                        $studentController->delete($_GET['id']);
-                        break;
-                    default:
-                        $studentController->index();
+    // Handle post operations
+    if ($page === 'posts') {
+        switch ($operation) {
+            case 'store':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $result = $postController->store($_POST, $_FILES);
+                    if ($result) {
+                        $_SESSION['success'] = "Post created successfully!";
+                    } else {
+                        $_SESSION['error'] = "Failed to create post. Please try again.";
+                    }
+                    header('Location: index.php?page=posts');
+                    exit();
                 }
                 break;
 
-            case 'posts':
-                switch ($action) {
-                    case 'index':
-                        $postController->index();
-                        break;
-                    case 'create':
-                        $postController->create();
-                        break;
-                    case 'store':
-                        $postController->store();
-                        break;
-                    case 'edit':
-                        $postController->edit($_GET['id']);
-                        break;
-                    case 'update':
-                        $postController->update($_GET['id']);
-                        break;
-                    case 'delete':
-                        $postController->delete($_GET['id']);
-                        break;
-                    default:
-                        $postController->index();
+            case 'update':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'])) {
+                    $result = $postController->update($_GET['id'], $_POST, $_FILES);
+                    if ($result) {
+                        $_SESSION['success'] = "Post updated successfully!";
+                    } else {
+                        $_SESSION['error'] = "Failed to update post. Please try again.";
+                    }
+                    header('Location: index.php?page=posts');
+                    exit();
                 }
                 break;
 
-            case 'menus':
-                switch ($action) {
-                    case 'index':
-                        $menuController->index();
-                        break;
-                    case 'create':
-                        $menuController->create();
-                        break;
-                    case 'store':
-                        $menuController->store();
-                        break;
-                    case 'edit':
-                        $menuController->edit($_GET['id']);
-                        break;
-                    case 'update':
-                        $menuController->update($_GET['id']);
-                        break;
-                    case 'delete':
-                        $menuController->delete($_GET['id']);
-                        break;
-                    default:
-                        $menuController->index();
+            case 'delete':
+                if (isset($_GET['id'])) {
+                    $result = $postController->delete($_GET['id']);
+                    if ($result) {
+                        $_SESSION['success'] = "Post deleted successfully!";
+                    } else {
+                        $_SESSION['error'] = "Failed to delete post. Please try again.";
+                    }
+                    header('Location: index.php?page=posts');
+                    exit();
                 }
                 break;
-
-            default:
-                require_once 'views/dashboard.php';
         }
     }
+
+    // Set page title
+    $_SESSION['page_title'] = ucfirst($page);
+
+    // Initialize variables for dashboard
+    $totalPosts = method_exists($postController, 'count') ? $postController->count() : 0;
+    $totalMenus = method_exists($menuController, 'count') ? $menuController->count() : 0;
+    $totalStudents = method_exists($studentController, 'count') ? $studentController->count() : 0;
+    $totalRegistrations = method_exists($registrationController, 'count') ? $registrationController->count() : 0;
+    $recentPosts = method_exists($postController, 'getRecent') ? $postController->getRecent(5) : [];
+    $recentRegistrations = method_exists($registrationController, 'getRecent') ? $registrationController->getRecent(5) : [];
+
+    // Get content based on page
+    ob_start();
+    switch ($page) {
+        case 'dashboard':
+            include 'views/dashboard.php';
+            break;
+        case 'posts':
+            include 'views/posts.php';
+            break;
+        case 'menus':
+            require_once __DIR__ . '/../models/Menu.php';
+            include 'views/menus.php';
+            break;
+        case 'students':
+            include 'views/students.php';
+            break;
+        case 'registrations':
+            include 'views/registrations.php';
+            break;
+        default:
+            include 'views/dashboard.php';
+    }
+    $content = ob_get_clean();
+
+    // Include layout
+    include 'views/layout.php';
+
 } catch (Exception $e) {
     // Log error
     error_log($e->getMessage());

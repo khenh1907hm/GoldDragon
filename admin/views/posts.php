@@ -1,14 +1,43 @@
 <?php
-$posts = $postController->getAll();
+require_once __DIR__ . '/../../models/Post.php';
+$post = new Post();
+
+// Get current page
+$currentPage = isset($_GET['page_num']) ? (int)$_GET['page_num'] : 1;
+$currentPage = max(1, $currentPage); // Ensure page is at least 1
+
+// Get posts for current page
+$result = $post->getAll($currentPage);
+$posts = $result->fetchAll(PDO::FETCH_ASSOC);
+
+// Get total pages
+$totalPages = $post->getTotalPages();
+
 $operation = $_GET['op'] ?? '';
 $postId = $_GET['id'] ?? null;
 
 // Get current post for editing if in edit mode
 $currentPost = null;
 if ($operation === 'edit' && $postId) {
-    $currentPost = $postController->getById($postId);
+    $currentPost = $post->getById($postId);
 }
 ?>
+
+<!-- TinyMCE -->
+<script src="https://cdn.tiny.cloud/1/w3orm81dimzbu62mq1tqrqs7av33lffsc6votwc1c1iopvs0/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#editor',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        height: 400,
+        setup: function(editor) {
+            editor.on('change', function() {
+                editor.save(); // Save content to hidden input
+            });
+        }
+    });
+</script>
 
 <!-- Header -->
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -25,7 +54,7 @@ if ($operation === 'edit' && $postId) {
         </nav>
     </div>
     <?php if (!in_array($operation, ['new', 'edit'])): ?>
-        <a href="index.php?action=posts&op=new" class="btn btn-primary">
+        <a href="index.php?page=posts&op=new" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Post
         </a>
     <?php endif; ?>
@@ -35,12 +64,12 @@ if ($operation === 'edit' && $postId) {
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><?php echo $operation === 'edit' ? 'Edit Post' : 'Create New Post'; ?></h5>
-            <a href="index.php?action=posts" class="btn btn-sm btn-outline-secondary">
+            <a href="index.php?page=posts" class="btn btn-sm btn-outline-secondary">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>
         </div>
         <div class="card-body">
-            <form action="index.php?action=<?php echo $operation === 'edit' ? 'post_update&id=' . $postId : 'post_store'; ?>" 
+            <form action="index.php?page=posts&op=<?php echo $operation === 'edit' ? 'update&id=' . $postId : 'store'; ?>" 
                   method="POST" 
                   enctype="multipart/form-data" 
                   class="needs-validation" 
@@ -52,20 +81,19 @@ if ($operation === 'edit' && $postId) {
                            class="form-control" 
                            id="title" 
                            name="title" 
-                           value="<?php echo $currentPost ? htmlspecialchars($currentPost['title']) : ''; ?>"
+                           value="<?php echo $currentPost ? htmlspecialchars($currentPost['title'] ?? '') : ''; ?>"
                            required>
                     <div class="invalid-feedback">Please provide a title.</div>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label">Content</label>
-                    <div id="editor"><?php echo $currentPost ? $currentPost['content'] : ''; ?></div>
-                    <input type="hidden" name="content">
+                    <textarea id="editor" name="content"><?php echo $currentPost ? ($currentPost['content'] ?? '') : ''; ?></textarea>
                 </div>
 
                 <div class="mb-4">
                     <label for="image" class="form-label">Featured Image</label>
-                    <?php if ($currentPost && $currentPost['image']): ?>
+                    <?php if ($currentPost && !empty($currentPost['image'])): ?>
                         <div class="mb-2">
                             <img src="<?php echo htmlspecialchars($currentPost['image']); ?>" 
                                  alt="Current featured image" 
@@ -84,13 +112,13 @@ if ($operation === 'edit' && $postId) {
                 <div class="mb-4">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" id="status" name="status" required>
-                        <option value="published" <?php echo ($currentPost && $currentPost['status'] === 'published') ? 'selected' : ''; ?>>Published</option>
-                        <option value="draft" <?php echo ($currentPost && $currentPost['status'] === 'draft') ? 'selected' : ''; ?>>Draft</option>
+                        <option value="published" <?php echo ($currentPost && ($currentPost['status'] ?? '') === 'published') ? 'selected' : ''; ?>>Published</option>
+                        <option value="draft" <?php echo ($currentPost && ($currentPost['status'] ?? '') === 'draft') ? 'selected' : ''; ?>>Draft</option>
                     </select>
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='index.php?action=posts'">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='index.php?page=posts'">
                         Cancel
                     </button>
                     <button type="submit" class="btn btn-primary">
@@ -136,71 +164,85 @@ if ($operation === 'edit' && $postId) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($posts as $post): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($post['id']); ?></td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <?php if ($post['image']): ?>
-                                        <img src="<?php echo htmlspecialchars($post['image']); ?>" 
-                                             alt="" 
-                                             class="rounded me-3" 
-                                             style="width: 40px; height: 40px; object-fit: cover;">
-                                    <?php endif; ?>
-                                    <div>
-                                        <h6 class="mb-0"><?php echo htmlspecialchars($post['title']); ?></h6>
-                                        <small class="text-muted">
-                                            <?php echo substr(strip_tags($post['content']), 0, 50) . '...'; ?>
-                                        </small>
+                        <?php if (empty($posts)): ?>
+                            <tr>
+                                <td colspan="5" class="text-center py-4">
+                                    <div class="text-muted">No posts found</div>
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($posts as $post): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($post['id'] ?? ''); ?></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <?php if (!empty($post['image'])): ?>
+                                            <img src="<?php echo htmlspecialchars($post['image']); ?>" 
+                                                 alt="" 
+                                                 class="rounded me-3" 
+                                                 style="width: 40px; height: 40px; object-fit: cover;">
+                                        <?php endif; ?>
+                                        <div>
+                                            <h6 class="mb-0"><?php echo htmlspecialchars($post['title'] ?? ''); ?></h6>
+                                            <small class="text-muted">
+                                                <?php echo substr(strip_tags($post['content'] ?? ''), 0, 50) . '...'; ?>
+                                            </small>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge bg-<?php echo $post['status'] === 'published' ? 'success' : 'warning'; ?>">
-                                    <?php echo ucfirst(htmlspecialchars($post['status'])); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <?php echo date('M d, Y H:i', strtotime($post['created_at'])); ?>
-                            </td>
-                            <td>
-                                <div class="btn-group">
-                                    <a href="index.php?action=posts&op=edit&id=<?php echo $post['id']; ?>" 
-                                       class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button" 
-                                            class="btn btn-sm btn-outline-success"
-                                            onclick="toggleStatus(<?php echo $post['id']; ?>)">
-                                        <i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    <button type="button" 
-                                            class="btn btn-sm btn-outline-danger"
-                                            onclick="deletePost(<?php echo $post['id']; ?>)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
+                                </td>
+                                <td>
+                                    <span class="badge bg-<?php echo ($post['status'] ?? 'draft') === 'published' ? 'success' : 'warning'; ?>">
+                                        <?php echo ucfirst(htmlspecialchars($post['status'] ?? 'draft')); ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <?php echo date('M d, Y H:i', strtotime($post['created_at'] ?? 'now')); ?>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="index.php?page=posts&op=edit&id=<?php echo $post['id']; ?>" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-success"
+                                                onclick="toggleStatus(<?php echo $post['id']; ?>)">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger"
+                                                onclick="deletePost(<?php echo $post['id']; ?>)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
 
             <!-- Pagination -->
+            <?php if ($totalPages > 1): ?>
             <nav class="mt-4" aria-label="Posts navigation">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    <li class="page-item <?php echo $currentPage <= 1 ? 'disabled' : ''; ?>">
+                        <a class="page-link" href="?page=posts&page_num=<?php echo $currentPage - 1; ?>" tabindex="-1">Previous</a>
                     </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                    
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?php echo $i === $currentPage ? 'active' : ''; ?>">
+                            <a class="page-link" href="?page=posts&page_num=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    
+                    <li class="page-item <?php echo $currentPage >= $totalPages ? 'disabled' : ''; ?>">
+                        <a class="page-link" href="?page=posts&page_num=<?php echo $currentPage + 1; ?>">Next</a>
                     </li>
                 </ul>
             </nav>
+            <?php endif; ?>
         </div>
     </div>
 

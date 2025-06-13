@@ -2,7 +2,7 @@
     <footer class="footer">
         <div class="top-bar destop">
             <div class="container">
-                <div class="support-item animate" data-animation="fade-in-up delay-1">
+                <div class="support-item ">
                     <i class="fas fa-utensils"></i>
                     <span>Ăn sáng</span>
                 </div>
@@ -32,7 +32,7 @@
         <div class="main-footer">
             <div class="container">
                 <div class="footer-logo">
-                    <img src="/asset/img/logo.png" alt="Golden Dragon Kindergarten">
+                    <img src="/RongVang/asset/img/logo.png" alt="Golden Dragon Kindergarten">
                     <div class="address">
                         <p><strong>Golden Dragon Kindergarten</strong> - Nơi nuôi dưỡng tài năng tương lai</p>
                         <p><i class="fas fa-map-marker-alt"></i> 15 Đông Đô, Thị trấn Liên Nghĩa, Đức Trọng, Lâm Đồng</p>
@@ -85,12 +85,32 @@
     }
     </script>
     <script src="<?php echo $baseUrl; ?>/asset/js/animations.js"></script>
-    <script src="/3D_web_test/asset/js/animations.js"></script>
+    <script src="/RongVang/asset/js/animations.js"></script>
     <script>
         function toggleMobileMenu() {
             const mobileMenu = document.querySelector('.mobile-menu');
             mobileMenu.classList.toggle('active');
         }
+
+        // Đóng menu mobile khi click vào link
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.mobile-menu').classList.remove('active');
+                });
+            });
+        });
+
+        // Tự động ẩn menu mobile khi resize lên desktop
+        window.addEventListener('resize', function() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            if (window.innerWidth > 768) {
+                mobileMenu.classList.remove('active');
+            }
+        });
     </script>
+    <style>
+        .mobile-menu-btn { z-index: 1001; }
+    </style>
 </body>
 </html>

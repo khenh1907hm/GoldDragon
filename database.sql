@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
+    image VARCHAR(255) DEFAULT NULL,
+    status ENUM('draft', 'published') NOT NULL DEFAULT 'draft',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -45,18 +47,19 @@ CREATE TABLE IF NOT EXISTS students (
 );
 
 -- Bảng registrations (đơn đăng ký từ phụ huynh)
-CREATE TABLE IF NOT EXISTS registrations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    student_name VARCHAR(100) NOT NULL,
-    nick_name VARCHAR(50),
-    age INT,
-    parent_name VARCHAR(100),
-    phone VARCHAR(20),
-    address VARCHAR(255),
-    content TEXT,
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE IF NOT EXISTS `registrations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_name` varchar(255) NOT NULL,
+  `student_name` varchar(255) NOT NULL,
+  `nick_name` varchar(255) NOT NULL,
+  `age` int(11) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `address` text NOT NULL,
+  `content` text NOT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tài khoản admin mẫu (mật khẩu: 123456, hash SHA-256 là demo, bạn nên thay bằng hash thật khi triển khai)
 INSERT INTO users (username, password) VALUES ('admin', 'admin');

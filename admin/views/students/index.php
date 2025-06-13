@@ -4,7 +4,13 @@ ob_start();
 
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="h3 mb-0">Student Management</h2>        <a href="index.php?page=students&action=create" class="btn btn-primary">
+        <h2 class="h3 mb-0">Student Management</h2>
+        <form class="mb-3" method="get" action="index.php">
+            <!-- <input type="hidden" name="page" value="students"> -->
+            <input type="text" id="searchInput" placeholder="Tìm học sinh...">
+        </form>        
+        <div id="results"></div>
+        <a href="index.php?page=students&action=create" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Student
         </a>
     </div>
@@ -93,4 +99,21 @@ function confirmDelete(id) {
         window.location.href = 'index.php?page=students&action=delete&id=' + id;
     }
 }
+document.getElementById('searchInput').addEventListener('input', function () {
+    const keyword = this.value;
+
+    if (keyword.length > 1) {
+        fetch('ajax/search_students.php?keyword=' + encodeURIComponent(keyword))
+            .then(response => response.json())
+            .then(data => {
+                let html = '';
+                data.forEach(student => {
+                    html += `<p>${student.full_name}</p>`;
+                });
+                document.getElementById('results').innerHTML = html;
+            });
+    } else {
+        document.getElementById('results').innerHTML = '';
+    }
+});
 </script>

@@ -18,6 +18,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <link href="assets/css/admin.css" rel="stylesheet">
     <!-- Quill Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 <body>    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="index.php">

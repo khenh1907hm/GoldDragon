@@ -1,130 +1,196 @@
 <?php
-class Student {
-    private $conn;
-    private $table = 'students';
+require_once __DIR__ . '/../includes/Database.php';
 
-    public function __construct($db) {
-        $this->conn = $db;
+class Student {
+    private $db;
+
+    public function __construct() {
+        try {
+            $this->db = Database::getInstance()->getConnection();
+        } catch (Exception $e) {
+            error_log("Student Model Error: " . $e->getMessage());
+            throw new Exception("Failed to initialize model");
+        }
     }
 
     // Get all students
     public function getAll() {
-        $query = "SELECT * FROM " . $this->table . " ORDER BY id DESC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt;
-    }
-
-    // Create Student
-    public function create($data) {
-        $query = "INSERT INTO " . $this->table . " 
-                (full_name, nick_name, age, parent_name, phone, address, notes) 
-                VALUES 
-                (:full_name, :nick_name, :age, :parent_name, :phone, :address, :notes)";
-        
-        $stmt = $this->conn->prepare($query);
-        
-        // Clean data
-        $full_name = htmlspecialchars(strip_tags($data['full_name']));
-        $nick_name = htmlspecialchars(strip_tags($data['nick_name']));
-        $age = htmlspecialchars(strip_tags($data['age']));
-        $parent_name = htmlspecialchars(strip_tags($data['parent_name']));
-        $phone = htmlspecialchars(strip_tags($data['phone']));
-        $address = htmlspecialchars(strip_tags($data['address']));
-        $notes = htmlspecialchars(strip_tags($data['notes']));
-
-        // Bind data
-        $stmt->bindParam(':full_name', $full_name);
-        $stmt->bindParam(':nick_name', $nick_name);
-        $stmt->bindParam(':age', $age);
-        $stmt->bindParam(':parent_name', $parent_name);
-        $stmt->bindParam(':phone', $phone);
-        $stmt->bindParam(':address', $address);
-        $stmt->bindParam(':notes', $notes);
-
-        if($stmt->execute()) {
-            return true;
+        try {
+            $sql = "SELECT * FROM students ORDER BY created_at DESC";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt;
+        } catch (Exception $e) {
+            error_log("Get All Students Error: " . $e->getMessage());
+            return false;
         }
-        return false;
     }
 
-    // Read single student
+    // Get student by ID
     public function getById($id) {
-        $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $sql = "SELECT * FROM students WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Get Student Error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Create new student
+    public function create($data) {
+        try {
+            $sql = "INSERT INTO students (full_name, nick_name, age, parent_name, phone, address, notes, created_at) 
+                    VALUES (:full_name, :nick_name, :age, :parent_name, :phone, :address, :notes, NOW())";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':full_name', $data['full_name']);
+            $stmt->bindParam(':nick_name', $data['nick_name']);
+            $stmt->bindParam(':age', $data['age']);
+            $stmt->bindParam(':parent_name', $data['parent_name']);
+            $stmt->bindParam(':phone', $data['phone']);
+            $stmt->bindParam(':address', $data['address']);
+            $stmt->bindParam(':notes', $data['notes']);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Create Student Error: " . $e->getMessage());
+            return false;
+        }
     }
 
     // Update student
     public function update($id, $data) {
-        $query = "UPDATE " . $this->table . " 
-                SET full_name = :full_name,
-                    nick_name = :nick_name,
-                    age = :age,
-                    parent_name = :parent_name,
-                    phone = :phone,
-                    address = :address,
-                    notes = :notes
-                WHERE id = :id";
-
-        $stmt = $this->conn->prepare($query);
-        
-        // Clean data
-        $full_name = htmlspecialchars(strip_tags($data['full_name']));
-        $nick_name = htmlspecialchars(strip_tags($data['nick_name']));
-        $age = htmlspecialchars(strip_tags($data['age']));
-        $parent_name = htmlspecialchars(strip_tags($data['parent_name']));
-        $phone = htmlspecialchars(strip_tags($data['phone']));
-        $address = htmlspecialchars(strip_tags($data['address']));
-        $notes = htmlspecialchars(strip_tags($data['notes']));
-
-        // Bind data
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':full_name', $full_name);
-        $stmt->bindParam(':nick_name', $nick_name);
-        $stmt->bindParam(':age', $age);
-        $stmt->bindParam(':parent_name', $parent_name);
-        $stmt->bindParam(':phone', $phone);
-        $stmt->bindParam(':address', $address);
-        $stmt->bindParam(':notes', $notes);
-
-        if($stmt->execute()) {
-            return true;
+        try {
+            $sql = "UPDATE students 
+                    SET full_name = :full_name, 
+                        nick_name = :nick_name, 
+                        age = :age, 
+                        parent_name = :parent_name, 
+                        phone = :phone, 
+                        address = :address, 
+                        notes = :notes 
+                    WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':full_name', $data['full_name']);
+            $stmt->bindParam(':nick_name', $data['nick_name']);
+            $stmt->bindParam(':age', $data['age']);
+            $stmt->bindParam(':parent_name', $data['parent_name']);
+            $stmt->bindParam(':phone', $data['phone']);
+            $stmt->bindParam(':address', $data['address']);
+            $stmt->bindParam(':notes', $data['notes']);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Update Student Error: " . $e->getMessage());
+            return false;
         }
-        return false;
     }
 
     // Delete student
     public function delete($id) {
-        $query = "DELETE FROM " . $this->table . " WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id);
-        
-        if($stmt->execute()) {
-            return true;
+        try {
+            $sql = "DELETE FROM students WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Delete Student Error: " . $e->getMessage());
+            return false;
         }
-        return false;
     }
 
     // Count total students
-    public function count() {
-        $query = "SELECT COUNT(*) as total FROM " . $this->table;
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['total'];
+    public function count($search = '') {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM students";
+            $params = [];
+            
+            if (!empty($search)) {
+                $sql .= " WHERE full_name LIKE :search OR nick_name LIKE :search OR phone LIKE :search";
+                $params[':search'] = "%$search%";
+            }
+            
+            $stmt = $this->db->prepare($sql);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['total'];
+        } catch (Exception $e) {
+            error_log("Count Students Error: " . $e->getMessage());
+            return 0;
+        }
     }
 
-    public function getCount() {
-        return $this->conn->query("SELECT COUNT(*) FROM students");
+    // Get paginated results with search
+    public function getPaginated($limit, $offset, $search = '') {
+        try {
+            $sql = "SELECT * FROM students";
+            $params = [];
+            
+            if (!empty($search)) {
+                $sql .= " WHERE full_name LIKE :search OR nick_name LIKE :search OR phone LIKE :search";
+                $params[':search'] = "%$search%";
+            }
+            
+            $sql .= " ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+            $params[':limit'] = $limit;
+            $params[':offset'] = $offset;
+            
+            $stmt = $this->db->prepare($sql);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+            $stmt->execute();
+            return $stmt;
+        } catch (Exception $e) {
+            error_log("Get Paginated Students Error: " . $e->getMessage());
+            return false;
+        }
     }
-    public function getPaginated($limit, $offset) {
-        $stmt = $this->conn->prepare("SELECT * FROM students ORDER BY id DESC LIMIT :limit OFFSET :offset");
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt;
+
+    // Search students by keyword
+    public function searchStudents($keyword) {
+        try {
+            if (!$this->db) {
+                error_log("Database connection is null in searchStudents");
+                return false;
+            }
+
+            $keyword = '%' . $keyword . '%';
+            $sql = "SELECT * FROM students 
+                   WHERE full_name LIKE :keyword 
+                   OR nick_name LIKE :keyword 
+                   OR phone LIKE :keyword 
+                   OR parent_name LIKE :keyword
+                   ORDER BY full_name ASC";
+            
+            error_log("Search query: " . $sql);
+            error_log("Search keyword: " . $keyword);
+            
+            $stmt = $this->db->prepare($sql);
+            if (!$stmt) {
+                error_log("Failed to prepare statement: " . print_r($this->db->errorInfo(), true));
+                return false;
+            }
+
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+            $success = $stmt->execute();
+            
+            if (!$success) {
+                error_log("Failed to execute statement: " . print_r($stmt->errorInfo(), true));
+                return false;
+            }
+            
+            return $stmt;
+        } catch (PDOException $e) {
+            error_log("Error in searchStudents: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            return false;
+        }
     }
 }
+?>

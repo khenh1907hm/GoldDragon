@@ -1,26 +1,39 @@
 <?php
 require_once __DIR__ . '/../models/Student.php';
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/Database.php';
 
 class StudentController {
     private $student;
     private $viewPath;
     private $adminPath;
+    private $db;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        $database = Database::getInstance();
-        $db = $database->connect();
-        $this->student = new Student($db);
+        try {
+            $this->db = Database::getInstance()->getConnection();
+        } catch (Exception $e) {
+            error_log("StudentController Error: " . $e->getMessage());
+            throw new Exception("Failed to initialize controller");
+        }
+        $this->student = new Student($this->db);
         $this->adminPath = dirname(__DIR__) . '/admin/';
         $this->viewPath = $this->adminPath . 'views/students/';
     }
 
     public function count() {
-        $result = $this->student->getAll();
-        return $result->rowCount();
+        try {
+            $sql = "SELECT COUNT(*) as total FROM students";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (Exception $e) {
+            error_log("Count Error: " . $e->getMessage());
+            return 0;
+        }
     }
 
     public function index() {
@@ -33,8 +46,7 @@ class StudentController {
     $students = $result->fetchAll(PDO::FETCH_ASSOC);
 
     // Tổng số bản ghi
-    $totalResult = $this->student->getCount();
-    $totalStudents = $totalResult->fetchColumn();
+    $totalStudents = $this->student->getCount();
     $totalPages = ceil($totalStudents / $limit);
 
     ob_start();
@@ -170,6 +182,20 @@ class StudentController {
             'totalPages' => $totalPages,
             'page' => $page,
         ];
+    }
+
+    // Get recent students
+    public function getRecent($limit = 5) {
+        try {
+            $sql = "SELECT * FROM students ORDER BY created_at DESC LIMIT :limit";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Get Recent Error: " . $e->getMessage());
+            return [];
+        }
     }
 
 }
