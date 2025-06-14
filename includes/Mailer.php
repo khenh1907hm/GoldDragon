@@ -17,7 +17,7 @@ class Mailer {
             $this->mailer->Host = 'smtp.gmail.com';
             $this->mailer->SMTPAuth = true;
             $this->mailer->Username = 'hminh19072003@gmail.com';
-            $this->mailer->Password = 'your_app_password'; // Use App Password from Google Account
+            $this->mailer->Password = 'bjwy adcp wcgj vgvr'; // TODO: Add your Gmail App Password here. Get it from Google Account > Security > 2-Step Verification > App passwords
             $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mailer->Port = 587;
             $this->mailer->CharSet = 'UTF-8';
@@ -48,6 +48,87 @@ class Mailer {
             
             // Create email body
             $body = "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset='UTF-8'>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        line-height: 1.6;
+                        color: #333;
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                    }
+                    .header {
+                        background-color: #4CAF50;
+                        color: white;
+                        padding: 20px;
+                        text-align: center;
+                        border-radius: 5px 5px 0 0;
+                    }
+                    .content {
+                        background-color: #f9f9f9;
+                        padding: 20px;
+                        border: 1px solid #ddd;
+                        border-radius: 0 0 5px 5px;
+                    }
+                    .info-block {
+                        background-color: white;
+                        padding: 15px;
+                        margin: 10px 0;
+                        border-radius: 5px;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    }
+                    .label {
+                        font-weight: bold;
+                        color: #4CAF50;
+                        display: inline-block;
+                        width: 150px;
+                    }
+                    .footer {
+                        text-align: center;
+                        margin-top: 20px;
+                        padding-top: 20px;
+                        border-top: 1px solid #ddd;
+                        color: #666;
+                        font-size: 0.9em;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class='header'>
+                    <h2>Thông Báo Đăng Ký Mới</h2>
+                    <p>Trường Mầm Non Rồng Vàng</p>
+                </div>
+                <div class='content'>
+                    <p>Kính gửi Ban Giám Hiệu,</p>
+                    <p>Chúng tôi vừa nhận được một đăng ký mới từ phụ huynh. Dưới đây là thông tin chi tiết:</p>
+                    
+                    <div class='info-block'>
+                        <p><span class='label'>Họ tên bé:</span> {$registration['student_name']}</p>
+                        <p><span class='label'>Tên thường gọi:</span> {$registration['nick_name']}</p>
+                        <p><span class='label'>Tuổi:</span> {$registration['age']}</p>
+                    </div>
+
+                    <div class='info-block'>
+                        <p><span class='label'>Họ tên phụ huynh:</span> {$registration['parent_name']}</p>
+                        <p><span class='label'>Số điện thoại:</span> {$registration['phone']}</p>
+                        <p><span class='label'>Địa chỉ:</span> {$registration['address']}</p>
+                    </div>
+
+                    <div class='info-block'>
+                        <p><span class='label'>Nội dung:</span></p>
+                        <p>{$registration['content']}</p>
+                    </div>
+
+                    <div class='info-block'>
+                        <p><span class='label'>Thời gian đăng ký:</span> {$registration['created_at']}</p>
+                    </div>
+                </div>
+                <div class='footer'>
+                    <p>Đây là email tự động từ hệ thống đăng ký của Trường Mầm Non Rồng Vàng</p>
                 <h2>New Registration Received</h2>
                 <p><strong>Student Name:</strong> {$registration['student_name']}</p>
                 <p><strong>Nick Name:</strong> {$registration['nick_name']}</p>
@@ -69,7 +150,8 @@ class Mailer {
             return true;
         } catch (Exception $e) {
             error_log("Send Email Error: " . $e->getMessage());
-            throw new Exception("Failed to send email notification");
+            error_log("SMTP Debug Info: " . $this->mailer->ErrorInfo);
+            throw new Exception("Failed to send email notification: " . $e->getMessage());
         }
     }
 } 

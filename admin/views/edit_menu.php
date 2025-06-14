@@ -1,7 +1,19 @@
 <?php
-$menu = new Menu();
-$menus = $menu->getAll();
-$currentDate = date('Y-m-d');
+$pageTitle = 'Chỉnh sửa thực đơn';
+require_once __DIR__ . '/../layouts/header.php';
+
+$menu = $menuController->getById($_GET['id']);
+if (!$menu) {
+    $_SESSION['error'] = "Không tìm thấy thực đơn";
+    header('Location: index.php?page=menus');
+    exit();
+}
+
+$monday = explode('|', $menu['monday']);
+$tuesday = explode('|', $menu['tuesday']);
+$wednesday = explode('|', $menu['wednesday']);
+$thursday = explode('|', $menu['thursday']);
+$friday = explode('|', $menu['friday']);
 ?>
 
 <div class="container-fluid">
@@ -9,18 +21,9 @@ $currentDate = date('Y-m-d');
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Quản lý thực đơn</h3>
+                    <h3 class="card-title">Chỉnh sửa thực đơn</h3>
                 </div>
                 <div class="card-body">
-                    <?php if (isset($_SESSION['success'])): ?>
-                        <div class="alert alert-success">
-                            <?php 
-                            echo $_SESSION['success'];
-                            unset($_SESSION['success']);
-                            ?>
-                        </div>
-                    <?php endif; ?>
-
                     <?php if (isset($_SESSION['error'])): ?>
                         <div class="alert alert-danger">
                             <?php 
@@ -30,15 +33,17 @@ $currentDate = date('Y-m-d');
                         </div>
                     <?php endif; ?>
 
-                    <!-- Form thêm thực đơn -->
-                    <form action="index.php?page=menus&action=create" method="POST" class="mb-4">
+                    <form action="index.php?page=menus&action=update" method="POST">
+                        <input type="hidden" name="id" value="<?php echo $menu['id']; ?>">
+                        
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="week_range">Chọn tuần</label>
-                                    <input type="text" name="week_range" id="week_range" class="form-control" required>
-                                    <input type="hidden" name="start_date" id="start_date">
-                                    <input type="hidden" name="end_date" id="end_date">
+                                    <input type="text" name="week_range" id="week_range" class="form-control" 
+                                           value="<?php echo date('d/m/Y', strtotime($menu['start_date'])) . ' - ' . date('d/m/Y', strtotime($menu['end_date'])); ?>" required>
+                                    <input type="hidden" name="start_date" id="start_date" value="<?php echo $menu['start_date']; ?>">
+                                    <input type="hidden" name="end_date" id="end_date" value="<?php echo $menu['end_date']; ?>">
                                 </div>
                             </div>
                         </div>
@@ -50,19 +55,19 @@ $currentDate = date('Y-m-d');
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa sáng</label>
-                                            <input type="text" name="monday_breakfast" class="form-control">
+                                            <input type="text" name="monday_breakfast" class="form-control" value="<?php echo $monday[0]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa trưa</label>
-                                            <input type="text" name="monday_lunch" class="form-control">
+                                            <input type="text" name="monday_lunch" class="form-control" value="<?php echo $monday[1]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa xế</label>
-                                            <input type="text" name="monday_snack" class="form-control">
+                                            <input type="text" name="monday_snack" class="form-control" value="<?php echo $monday[2]; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -76,19 +81,19 @@ $currentDate = date('Y-m-d');
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa sáng</label>
-                                            <input type="text" name="tuesday_breakfast" class="form-control">
+                                            <input type="text" name="tuesday_breakfast" class="form-control" value="<?php echo $tuesday[0]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa trưa</label>
-                                            <input type="text" name="tuesday_lunch" class="form-control">
+                                            <input type="text" name="tuesday_lunch" class="form-control" value="<?php echo $tuesday[1]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa xế</label>
-                                            <input type="text" name="tuesday_snack" class="form-control">
+                                            <input type="text" name="tuesday_snack" class="form-control" value="<?php echo $tuesday[2]; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -102,19 +107,19 @@ $currentDate = date('Y-m-d');
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa sáng</label>
-                                            <input type="text" name="wednesday_breakfast" class="form-control">
+                                            <input type="text" name="wednesday_breakfast" class="form-control" value="<?php echo $wednesday[0]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa trưa</label>
-                                            <input type="text" name="wednesday_lunch" class="form-control">
+                                            <input type="text" name="wednesday_lunch" class="form-control" value="<?php echo $wednesday[1]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa xế</label>
-                                            <input type="text" name="wednesday_snack" class="form-control">
+                                            <input type="text" name="wednesday_snack" class="form-control" value="<?php echo $wednesday[2]; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -128,19 +133,19 @@ $currentDate = date('Y-m-d');
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa sáng</label>
-                                            <input type="text" name="thursday_breakfast" class="form-control">
+                                            <input type="text" name="thursday_breakfast" class="form-control" value="<?php echo $thursday[0]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa trưa</label>
-                                            <input type="text" name="thursday_lunch" class="form-control">
+                                            <input type="text" name="thursday_lunch" class="form-control" value="<?php echo $thursday[1]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa xế</label>
-                                            <input type="text" name="thursday_snack" class="form-control">
+                                            <input type="text" name="thursday_snack" class="form-control" value="<?php echo $thursday[2]; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -154,19 +159,19 @@ $currentDate = date('Y-m-d');
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa sáng</label>
-                                            <input type="text" name="friday_breakfast" class="form-control">
+                                            <input type="text" name="friday_breakfast" class="form-control" value="<?php echo $friday[0]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa trưa</label>
-                                            <input type="text" name="friday_lunch" class="form-control">
+                                            <input type="text" name="friday_lunch" class="form-control" value="<?php echo $friday[1]; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Bữa xế</label>
-                                            <input type="text" name="friday_snack" class="form-control">
+                                            <input type="text" name="friday_snack" class="form-control" value="<?php echo $friday[2]; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -175,73 +180,11 @@ $currentDate = date('Y-m-d');
 
                         <div class="row mt-3">
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-primary">Thêm thực đơn</button>
+                                <button type="submit" class="btn btn-primary">Cập nhật thực đơn</button>
+                                <a href="index.php?page=menus" class="btn btn-secondary">Quay lại</a>
                             </div>
                         </div>
                     </form>
-
-                    <!-- Danh sách thực đơn -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Tuần</th>
-                                    <th>Thứ 2</th>
-                                    <th>Thứ 3</th>
-                                    <th>Thứ 4</th>
-                                    <th>Thứ 5</th>
-                                    <th>Thứ 6</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($menus as $menu): ?>
-                                <tr>
-                                    <td>
-                                        <?php 
-                                            $startDate = new DateTime($menu['start_date']);
-                                            $endDate = new DateTime($menu['end_date']);
-                                            echo 'Tuần ' . $startDate->format('W') . ', ' . $startDate->format('Y') . '<br>';
-                                            echo '(' . $startDate->format('d/m/Y') . ' - ' . $endDate->format('d/m/Y') . ')';
-                                        ?>
-                                    </td>
-                                    <td>
-                                        Sáng: <?php echo $menu['monday_breakfast']; ?><br>
-                                        Trưa: <?php echo $menu['monday_lunch']; ?><br>
-                                        Xế: <?php echo $menu['monday_snack']; ?>
-                                    </td>
-                                    <td>
-                                        Sáng: <?php echo $menu['tuesday_breakfast']; ?><br>
-                                        Trưa: <?php echo $menu['tuesday_lunch']; ?><br>
-                                        Xế: <?php echo $menu['tuesday_snack']; ?>
-                                    </td>
-                                    <td>
-                                        Sáng: <?php echo $menu['wednesday_breakfast']; ?><br>
-                                        Trưa: <?php echo $menu['wednesday_lunch']; ?><br>
-                                        Xế: <?php echo $menu['wednesday_snack']; ?>
-                                    </td>
-                                    <td>
-                                        Sáng: <?php echo $menu['thursday_breakfast']; ?><br>
-                                        Trưa: <?php echo $menu['thursday_lunch']; ?><br>
-                                        Xế: <?php echo $menu['thursday_snack']; ?>
-                                    </td>
-                                    <td>
-                                        Sáng: <?php echo $menu['friday_breakfast']; ?><br>
-                                        Trưa: <?php echo $menu['friday_lunch']; ?><br>
-                                        Xế: <?php echo $menu['friday_snack']; ?>
-                                    </td>
-                                    <td>
-                                        <a href="index.php?page=menus&action=edit&id=<?php echo $menu['id']; ?>" class="btn btn-sm btn-primary">Sửa</a>
-                                        <form action="index.php?page=menus&action=delete" method="POST" class="d-inline">
-                                            <input type="hidden" name="id" value="<?php echo $menu['id']; ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
         </div>
@@ -257,8 +200,8 @@ $currentDate = date('Y-m-d');
 <script>
 $(document).ready(function() {
     $('#week_range').daterangepicker({
-        startDate: moment().startOf('week'),
-        endDate: moment().endOf('week'),
+        startDate: moment('<?php echo $menu['start_date']; ?>'),
+        endDate: moment('<?php echo $menu['end_date']; ?>'),
         minDate: moment().subtract(1, 'year'),
         maxDate: moment().add(1, 'year'),
         showWeekNumbers: true,
@@ -294,3 +237,5 @@ $(document).ready(function() {
     });
 });
 </script>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?> 

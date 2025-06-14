@@ -19,7 +19,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <!-- Quill Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-<body>    <nav class="navbar navbar-expand-lg">
+<body>   
+     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="index.php">
                 <i class="fas fa-school me-2"></i>Admin Panel
@@ -61,7 +62,7 @@ if (session_status() === PHP_SESSION_NONE) {
     </nav>
 
     <div class="container mt-4">
-        <?php if (isset($_SESSION['message'])): ?>
+       <?php if (isset($_SESSION['message'])): ?>
             <div class="alert alert-<?php echo $_SESSION['message_type']; ?> alert-dismissible fade show">
                 <?php 
                 echo $_SESSION['message'];
@@ -70,7 +71,8 @@ if (session_status() === PHP_SESSION_NONE) {
                 ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-        <?php endif; ?>        <!-- Content will be injected here -->
+        <?php endif; ?>
+             <!-- Content will be injected here -->
         <?php echo $content ?? ''; ?>
     </div>
 

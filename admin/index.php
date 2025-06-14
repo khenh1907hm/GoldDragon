@@ -111,8 +111,25 @@ try {
             include 'views/posts.php';
             break;
         case 'menus':
-            require_once __DIR__ . '/../models/Menu.php';
-            include 'views/menus.php';
+            switch ($action) {
+                case 'create':
+                    $menuController->create();
+                    break;
+                case 'update':
+                    $menuController->update();
+                    break;
+                case 'delete':
+                    $menuController->delete();
+                    break;
+                case 'edit':
+                    require_once __DIR__ . '/views/edit_menu.php';
+                    break;
+                default:
+                    // Lấy danh sách thực đơn
+                    $menus = $menuController->getAll();
+                    require_once __DIR__ . '/views/menus.php';
+                    break;
+            }
             break;
         case 'students':
             include 'views/students.php';

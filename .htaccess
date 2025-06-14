@@ -4,10 +4,22 @@ RewriteBase /RongVang/
 # Handle API requests
 RewriteRule ^api/(.*)$ api/index.php [QSA,L]
 
-# Handle frontend routes
+# Handle post detail pages
+RewriteRule ^ban-tin/([0-9]+)$ views/pages/ban-tin-detail.php?id=$1 [L,QSA]
+
+# Handle other pages
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# Prevent directory listing
+Options -Indexes
+
+# Set default character set
+AddDefaultCharset UTF-8
+
+# Enable CORS
+Header set Access-Control-Allow-Origin "*"
 
 # Prevent direct access to PHP files
 <FilesMatch "\.php$">

@@ -26,3 +26,114 @@
 [08-Jun-2025 15:34:43 Europe/Berlin] Preparing to send registration notification email
 [08-Jun-2025 15:34:47 Europe/Berlin] Send Email Error: SMTP Error: Could not authenticate.
 [08-Jun-2025 15:34:47 Europe/Berlin] Email sending failed: Failed to send email notification
+[14-Jun-2025 10:46:14 Europe/Berlin] API Request: /RongVang/api/register
+[14-Jun-2025 10:46:14 Europe/Berlin] POST data: Array
+(
+    [student_name] => Dung
+    [nick_name] => Bé
+    [age] => 1
+    [parent_name] => Minh
+    [phone] => 0839395292
+    [address] => haohahdsa
+    [content] => ádhasjkda
+)
+
+[14-Jun-2025 10:46:14 Europe/Berlin] Database connection successful
+[14-Jun-2025 10:46:14 Europe/Berlin] Mailer initialized successfully
+[14-Jun-2025 10:46:14 Europe/Berlin] Received POST data: Array
+(
+    [student_name] => Dung
+    [nick_name] => Bé
+    [age] => 1
+    [parent_name] => Minh
+    [phone] => 0839395292
+    [address] => haohahdsa
+    [content] => ádhasjkda
+)
+
+[14-Jun-2025 10:46:14 Europe/Berlin] Preparing to send registration notification email
+[14-Jun-2025 10:46:17 Europe/Berlin] Send Email Error: SMTP Error: Could not authenticate.
+[14-Jun-2025 10:46:17 Europe/Berlin] Email sending failed: Failed to send email notification
+[14-Jun-2025 10:56:54 Europe/Berlin] API Request: /RongVang/api/register
+[14-Jun-2025 10:56:54 Europe/Berlin] POST data: Array
+(
+    [student_name] => mới nhât
+    [nick_name] => mới nè
+    [age] => 5
+    [parent_name] => minh
+    [phone] => 0363365297
+    [address] => ákjdgkjsad
+    [content] => adhasjkdhasjk
+
+)
+
+[14-Jun-2025 10:56:54 Europe/Berlin] Database connection successful
+[14-Jun-2025 10:56:54 Europe/Berlin] Mailer initialized successfully
+[14-Jun-2025 10:56:54 Europe/Berlin] Received POST data: Array
+(
+    [student_name] => mới nhât
+    [nick_name] => mới nè
+    [age] => 5
+    [parent_name] => minh
+    [phone] => 0363365297
+    [address] => ákjdgkjsad
+    [content] => adhasjkdhasjk
+
+)
+
+[14-Jun-2025 10:56:54 Europe/Berlin] Preparing to send registration notification email
+[14-Jun-2025 10:56:59 Europe/Berlin] Registration notification email sent successfully
+[14-Jun-2025 10:59:01 Europe/Berlin] API Request: /RongVang/api/register
+[14-Jun-2025 10:59:01 Europe/Berlin] POST data: Array
+(
+    [student_name] => thông báo mới
+    [nick_name] => notifice
+    [age] => 4
+    [parent_name] => minh
+    [phone] => 0698953725
+    [address] => sgjds
+    [content] => áhdjkasd
+)
+
+[14-Jun-2025 10:59:01 Europe/Berlin] Database connection successful
+[14-Jun-2025 10:59:01 Europe/Berlin] Mailer initialized successfully
+[14-Jun-2025 10:59:01 Europe/Berlin] Received POST data: Array
+(
+    [student_name] => thông báo mới
+    [nick_name] => notifice
+    [age] => 4
+    [parent_name] => minh
+    [phone] => 0698953725
+    [address] => sgjds
+    [content] => áhdjkasd
+)
+
+[14-Jun-2025 10:59:01 Europe/Berlin] Preparing to send registration notification email
+[14-Jun-2025 10:59:06 Europe/Berlin] Registration notification email sent successfully
+[14-Jun-2025 11:02:29 Europe/Berlin] API Request: /RongVang/api/register
+[14-Jun-2025 11:02:29 Europe/Berlin] POST data: Array
+(
+    [student_name] => liên hệ
+    [nick_name] => trang ;iên hệ
+    [age] => 5
+    [parent_name] => hshshahs
+    [phone] => 0342975334
+    [address] => bjsaaadjkhsajk
+    [content] => ạkdhasjkdk
+)
+
+[14-Jun-2025 11:02:29 Europe/Berlin] Database connection successful
+[14-Jun-2025 11:02:29 Europe/Berlin] Mailer initialized successfully
+[14-Jun-2025 11:02:29 Europe/Berlin] Received POST data: Array
+(
+    [student_name] => liên hệ
+    [nick_name] => trang ;iên hệ
+    [age] => 5
+    [parent_name] => hshshahs
+    [phone] => 0342975334
+    [address] => bjsaaadjkhsajk
+    [content] => ạkdhasjkdk
+)
+
+[14-Jun-2025 11:02:29 Europe/Berlin] Preparing to send registration notification email
+[14-Jun-2025 11:02:34 Europe/Berlin] Registration notification email sent successfully

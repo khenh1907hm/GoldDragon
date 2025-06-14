@@ -1,4 +1,6 @@
-<?php require_once __DIR__ . '/../layouts/header.php'; ?>
+<?php 
+$pageTitle = 'Lịch học';
+require_once __DIR__ . '/../layouts/header.php'; ?>
 <main class="container mx-auto py-8">
     <h1 class="text-3xl font-bold mb-6 text-center text-yellow-700">Lịch học tuần này</h1>
     <div class="overflow-x-auto">

@@ -15,9 +15,13 @@ session_start();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+    <?php 
+    if (!isset($pageTitle) || $pageTitle === 'Trang chủ'): 
+    ?>
     <div class="bubble"></div>
     <div class="bubble"></div>
     <div class="bubble"></div>
+    <?php endif; ?>
 
     <header>
         <div class="logo">

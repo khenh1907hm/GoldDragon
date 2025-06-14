@@ -1,26 +1,35 @@
-<?php require_once __DIR__ . '/../layouts/header.php'; ?>
-<?php
+<?php 
+$pageTitle = 'Bản tin';
+require_once __DIR__ . '/../layouts/header.php'; 
+
+// Debug mode
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Kết nối DB và lấy danh sách bài viết (posts)
 require_once __DIR__ . '/../../models/Post.php';
-require_once __DIR__ . '/../../config/database.php';
-$database = Database::getInstance();
-$db = $database->connect();
-$postModel = new Post($db);
+$postModel = new Post();
+
+// Debug: Kiểm tra kết nối và dữ liệu
+try {
+    $total = $postModel->count();
+    echo "<!-- Debug: Tổng số bài viết: " . $total . " -->";
+    
+    $posts = $postModel->getAll($page)->fetchAll(PDO::FETCH_ASSOC);
+    echo "<!-- Debug: Số bài viết lấy được: " . count($posts) . " -->";
+} catch (Exception $e) {
+    echo "<!-- Debug Error: " . $e->getMessage() . " -->";
+}
 
 // Phân trang
 $perPage = 8;
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $total = $postModel->count();
 $pageCount = ceil($total / $perPage);
-$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 if ($page > $pageCount) $page = $pageCount;
-$start = ($page - 1) * $perPage;
 
 // Lấy bài viết cho trang hiện tại
-$stmt = $db->prepare("SELECT * FROM posts ORDER BY created_at DESC LIMIT :start, :perPage");
-$stmt->bindValue(':start', $start, PDO::PARAM_INT);
-$stmt->bindValue(':perPage', $perPage, PDO::PARAM_INT);
-$stmt->execute();
-$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$posts = $postModel->getAll($page)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <main class="container mx-auto py-8">
     <h1 class="text-3xl font-bold mb-8 text-center text-blue-700">Bản tin</h1>

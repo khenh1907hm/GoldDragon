@@ -36,58 +36,141 @@ class MenuController {
 
     // Show create form
     public function create() {
-        require dirname(__DIR__) . '/admin/views/layout.php';
-        require $this->viewPath . 'create.php';
-        
-        // require_once '../views/menus/create.php';
-    }
-
-    // Store new menu
-    public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $menuData = [
-                'title' => $_POST['title'],
-                'content' => $_POST['content']
-            ];
+            try {
+                // Validate input
+                if (empty($_POST['start_date']) || empty($_POST['end_date'])) {
+                    throw new Exception('Vui lòng chọn tuần');
+                }
 
-            if ($this->menu->create($menuData)) {
-                header('Location: index.php?page=menus');
-            } else {
-                echo "Có lỗi xảy ra";
+                // Prepare data
+                $data = [
+                    'start_date' => $_POST['start_date'],
+                    'end_date' => $_POST['end_date'],
+                    'monday_breakfast' => $_POST['monday_breakfast'] ?? null,
+                    'monday_lunch' => $_POST['monday_lunch'] ?? null,
+                    'monday_snack' => $_POST['monday_snack'] ?? null,
+                    'tuesday_breakfast' => $_POST['tuesday_breakfast'] ?? null,
+                    'tuesday_lunch' => $_POST['tuesday_lunch'] ?? null,
+                    'tuesday_snack' => $_POST['tuesday_snack'] ?? null,
+                    'wednesday_breakfast' => $_POST['wednesday_breakfast'] ?? null,
+                    'wednesday_lunch' => $_POST['wednesday_lunch'] ?? null,
+                    'wednesday_snack' => $_POST['wednesday_snack'] ?? null,
+                    'thursday_breakfast' => $_POST['thursday_breakfast'] ?? null,
+                    'thursday_lunch' => $_POST['thursday_lunch'] ?? null,
+                    'thursday_snack' => $_POST['thursday_snack'] ?? null,
+                    'friday_breakfast' => $_POST['friday_breakfast'] ?? null,
+                    'friday_lunch' => $_POST['friday_lunch'] ?? null,
+                    'friday_snack' => $_POST['friday_snack'] ?? null
+                ];
+
+                // Check if menu already exists for this week
+                $existingMenu = $this->menu->getByDateRange($data['start_date'], $data['end_date']);
+                if ($existingMenu) {
+                    throw new Exception('Thực đơn cho tuần này đã tồn tại');
+                }
+
+                // Create menu
+                if ($this->menu->create($data)) {
+                    $_SESSION['success'] = 'Thêm thực đơn thành công';
+                } else {
+                    throw new Exception('Không thể thêm thực đơn');
+                }
+            } catch (Exception $e) {
+                $_SESSION['error'] = $e->getMessage();
             }
         }
+        header('Location: index.php?page=menus');
+        exit;
     }
 
     // Show edit form
-    public function edit($id) {
-        $menu = $this->menu->getById($id);
-        require dirname(__DIR__) . '/admin/views/layout.php';
-        require $this->viewPath . 'edit.php';
+    public function edit() {
+        if (!isset($_GET['id'])) {
+            $_SESSION['error'] = 'Không tìm thấy thực đơn';
+            header('Location: index.php?page=menus');
+            exit;
+        }
+
+        $menu = $this->menu->getById($_GET['id']);
+        if (!$menu) {
+            $_SESSION['error'] = 'Không tìm thấy thực đơn';
+            header('Location: index.php?page=menus');
+            exit;
+        }
+
+        require_once __DIR__ . '/../admin/views/edit_menu.php';
     }
 
     // Update menu
-    public function update($id) {
+    public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $menuData = [
-                'title' => $_POST['title'],
-                'content' => $_POST['content']
-            ];
+            try {
+                if (!isset($_POST['id'])) {
+                    throw new Exception('Không tìm thấy thực đơn');
+                }
 
-            if ($this->menu->update($id, $menuData)) {
-                header('Location: index.php?page=menus');
-            } else {
-                echo "Có lỗi xảy ra";
+                // Validate input
+                if (empty($_POST['start_date']) || empty($_POST['end_date'])) {
+                    throw new Exception('Vui lòng chọn tuần');
+                }
+
+                // Prepare data
+                $data = [
+                    'start_date' => $_POST['start_date'],
+                    'end_date' => $_POST['end_date'],
+                    'monday_breakfast' => $_POST['monday_breakfast'] ?? null,
+                    'monday_lunch' => $_POST['monday_lunch'] ?? null,
+                    'monday_snack' => $_POST['monday_snack'] ?? null,
+                    'tuesday_breakfast' => $_POST['tuesday_breakfast'] ?? null,
+                    'tuesday_lunch' => $_POST['tuesday_lunch'] ?? null,
+                    'tuesday_snack' => $_POST['tuesday_snack'] ?? null,
+                    'wednesday_breakfast' => $_POST['wednesday_breakfast'] ?? null,
+                    'wednesday_lunch' => $_POST['wednesday_lunch'] ?? null,
+                    'wednesday_snack' => $_POST['wednesday_snack'] ?? null,
+                    'thursday_breakfast' => $_POST['thursday_breakfast'] ?? null,
+                    'thursday_lunch' => $_POST['thursday_lunch'] ?? null,
+                    'thursday_snack' => $_POST['thursday_snack'] ?? null,
+                    'friday_breakfast' => $_POST['friday_breakfast'] ?? null,
+                    'friday_lunch' => $_POST['friday_lunch'] ?? null,
+                    'friday_snack' => $_POST['friday_snack'] ?? null
+                ];
+
+                // Check if menu already exists for this week (excluding current menu)
+                $existingMenu = $this->menu->getByDateRange($data['start_date'], $data['end_date']);
+                if ($existingMenu && $existingMenu['id'] != $_POST['id']) {
+                    throw new Exception('Thực đơn cho tuần này đã tồn tại');
+                }
+
+                // Update menu
+                if ($this->menu->update($_POST['id'], $data)) {
+                    $_SESSION['success'] = 'Cập nhật thực đơn thành công';
+                } else {
+                    throw new Exception('Không thể cập nhật thực đơn');
+                }
+            } catch (Exception $e) {
+                $_SESSION['error'] = $e->getMessage();
             }
         }
+        header('Location: index.php?page=menus');
+        exit;
     }
 
     // Delete menu
-    public function delete($id) {
-        if ($this->menu->delete($id)) {
-            header('Location: index.php?page=menus');
-        } else {
-            echo "Có lỗi xảy ra";
+    public function delete() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+            try {
+                if ($this->menu->delete($_POST['id'])) {
+                    $_SESSION['success'] = 'Xóa thực đơn thành công';
+                } else {
+                    throw new Exception('Không thể xóa thực đơn');
+                }
+            } catch (Exception $e) {
+                $_SESSION['error'] = $e->getMessage();
+            }
         }
+        header('Location: index.php?page=menus');
+        exit;
     }
 
     // Get total count of menu items
@@ -116,5 +199,21 @@ class MenuController {
             error_log("Get Recent Error: " . $e->getMessage());
             return [];
         }
+    }
+
+    public function getAll() {
+        return $this->menu->getAll();
+    }
+
+    public function getById($id) {
+        return $this->menu->getById($id);
+    }
+
+    public function getCurrentWeekMenu() {
+        return $this->menu->getCurrentWeekMenu();
+    }
+
+    public function getCurrentWeekInfo() {
+        return $this->menu->getCurrentWeekInfo();
     }
 }
