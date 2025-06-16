@@ -12,6 +12,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . ROOT_PATH);
 
 // Include required files
 require_once __DIR__ . '/../includes/Database.php';
+require_once __DIR__ . '/../models/Menu.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/PostController.php';
 require_once __DIR__ . '/../controllers/MenuController.php';

@@ -1,5 +1,4 @@
 <?php
-require_once '../models/Menu.php';
 require_once __DIR__ . '/../includes/Database.php';
 
 class MenuController {
@@ -8,13 +7,13 @@ class MenuController {
     private $adminPath;
     private $db;
 
-
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
         try {
             $this->db = Database::getInstance()->getConnection();
+            require_once __DIR__ . '/../models/Menu.php';
             $this->menu = new Menu();
         } catch (Exception $e) {
             error_log("MenuController Error: " . $e->getMessage());
@@ -26,12 +25,19 @@ class MenuController {
 
     // List all menus
     public function index() {
-        $menus = $this->menu->getAll();
-        ob_start();
-        require $this->viewPath . 'index.php';
-        $content = ob_get_clean();
-        $_SESSION['page_title'] = "Menus";
-        require dirname(__DIR__) . '/admin/views/layout.php';
+        try {
+            $menus = $this->menu->getAll();
+            ob_start();
+            require $this->viewPath . 'index.php';
+            $content = ob_get_clean();
+            $_SESSION['page_title'] = "Menus";
+            require dirname(__DIR__) . '/admin/views/layout.php';
+        } catch (Exception $e) {
+            error_log("Error in index: " . $e->getMessage());
+            $_SESSION['error'] = "Có lỗi xảy ra khi tải danh sách thực đơn";
+            header('Location: index.php?page=dashboard');
+            exit;
+        }
     }
 
     // Show create form
@@ -71,8 +77,14 @@ class MenuController {
                 }
 
                 // Create menu
-                if ($this->menu->create($data)) {
+                $menuId = $this->menu->create($data);
+                if ($menuId) {
                     $_SESSION['success'] = 'Thêm thực đơn thành công';
+                    // Get the newly created menu
+                    $newMenu = $this->menu->getById($menuId);
+                    if ($newMenu) {
+                        $_SESSION['new_menu'] = $newMenu;
+                    }
                 } else {
                     throw new Exception('Không thể thêm thực đơn');
                 }
@@ -92,14 +104,17 @@ class MenuController {
             exit;
         }
 
-        $menu = $this->menu->getById($_GET['id']);
-        if (!$menu) {
-            $_SESSION['error'] = 'Không tìm thấy thực đơn';
+        try {
+            $menu = $this->menu->getById($_GET['id']);
+            if (!$menu) {
+                throw new Exception('Không tìm thấy thực đơn');
+            }
+            require_once __DIR__ . '/../admin/views/edit_menu.php';
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
             header('Location: index.php?page=menus');
             exit;
         }
-
-        require_once __DIR__ . '/../admin/views/edit_menu.php';
     }
 
     // Update menu
@@ -202,18 +217,84 @@ class MenuController {
     }
 
     public function getAll() {
-        return $this->menu->getAll();
+        try {
+            return $this->menu->getAll();
+        } catch (Exception $e) {
+            error_log("Get All Error: " . $e->getMessage());
+            return [];
+        }
     }
 
     public function getById($id) {
-        return $this->menu->getById($id);
+        try {
+            return $this->menu->getById($id);
+        } catch (Exception $e) {
+            error_log("Get By ID Error: " . $e->getMessage());
+            return null;
+        }
     }
 
     public function getCurrentWeekMenu() {
-        return $this->menu->getCurrentWeekMenu();
+        try {
+            return $this->menu->getCurrentWeekMenu();
+        } catch (Exception $e) {
+            error_log("Get Current Week Menu Error: " . $e->getMessage());
+            return null;
+        }
     }
 
     public function getCurrentWeekInfo() {
-        return $this->menu->getCurrentWeekInfo();
+        try {
+            return $this->menu->getCurrentWeekInfo();
+        } catch (Exception $e) {
+            error_log("Get Current Week Info Error: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function check() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $startDate = $_POST['start_date'];
+                $endDate = $_POST['end_date'];
+                
+                $menu = $this->menu->getByDateRange($startDate, $endDate);
+                
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'exists' => !empty($menu),
+                    'menu' => $menu
+                ]);
+                exit;
+            } catch (Exception $e) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'error' => $e->getMessage()
+                ]);
+                exit;
+            }
+        }
+    }
+
+    public function get() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+            try {
+                $menu = $this->menu->getById($_POST['id']);
+                
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => true,
+                    'menu' => $menu
+                ]);
+                exit;
+            } catch (Exception $e) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => false,
+                    'error' => $e->getMessage()
+                ]);
+                exit;
+            }
+        }
     }
 }

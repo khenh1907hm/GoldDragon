@@ -160,6 +160,15 @@ class Student {
                 return false;
             }
 
+            // Test database connection
+            try {
+                $testStmt = $this->db->query("SELECT 1");
+                $testStmt->fetch();
+            } catch (PDOException $e) {
+                error_log("Database connection test failed in searchStudents: " . $e->getMessage());
+                return false;
+            }
+
             $keyword = '%' . $keyword . '%';
             $sql = "SELECT * FROM students 
                    WHERE full_name LIKE :keyword 
@@ -168,7 +177,7 @@ class Student {
                    OR parent_name LIKE :keyword
                    ORDER BY full_name ASC";
             
-            error_log("Search query: " . $sql);
+            error_log("Search SQL: " . $sql);
             error_log("Search keyword: " . $keyword);
             
             $stmt = $this->db->prepare($sql);
@@ -177,15 +186,23 @@ class Student {
                 return false;
             }
 
-            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-            $success = $stmt->execute();
+            $stmt->bindValue(':keyword', $keyword, PDO::PARAM_STR);
             
-            if (!$success) {
-                error_log("Failed to execute statement: " . print_r($stmt->errorInfo(), true));
+            try {
+                $success = $stmt->execute();
+                if (!$success) {
+                    error_log("Failed to execute statement: " . print_r($stmt->errorInfo(), true));
+                    return false;
+                }
+            } catch (PDOException $e) {
+                error_log("Execute error: " . $e->getMessage());
                 return false;
             }
             
-            return $stmt;
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Number of results found: " . count($results));
+            
+            return $results;
         } catch (PDOException $e) {
             error_log("Error in searchStudents: " . $e->getMessage());
             error_log("Stack trace: " . $e->getTraceAsString());

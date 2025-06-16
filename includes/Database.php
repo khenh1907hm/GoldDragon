@@ -16,13 +16,14 @@ class Database {
                 [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
                 ]
             );
             error_log("Database connection successful");
         } catch (PDOException $e) {
             error_log("Database Connection Error: " . $e->getMessage());
-            throw new Exception("Database connection failed");
+            throw new Exception("Database connection failed: " . $e->getMessage());
         }
     }
 
@@ -34,7 +35,20 @@ class Database {
     }
 
     public function getConnection() {
+        if (!$this->conn) {
+            throw new Exception("Database connection is not initialized");
+        }
         return $this->conn;
+    }
+
+    public function testConnection() {
+        try {
+            $stmt = $this->conn->query("SELECT 1");
+            return $stmt->fetch();
+        } catch (PDOException $e) {
+            error_log("Database test connection error: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function prepare($sql) {

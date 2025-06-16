@@ -163,17 +163,40 @@ document.addEventListener('DOMContentLoaded', function() {
         // Set new timeout for search
         searchTimeout = setTimeout(() => {
             if (searchTerm.length > 0) {
-                fetch(`ajax/search_students.php?search=${encodeURIComponent(searchTerm)}`)
-                    .then(response => response.json())
+                // Show loading state
+                studentsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="mt-2">Searching...</div>
+                        </td>
+                    </tr>
+                `;
+
+                fetch(`/RongVang/admin/ajax/search_students.php?search=${encodeURIComponent(searchTerm)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
+                        console.log('Search results:', data);
+                        
+                        if (data.error) {
+                            throw new Error(data.message || 'Search failed');
+                        }
+                        
                         // Update table body
-                        if (data.students.length > 0) {
+                        if (data.students && Array.isArray(data.students) && data.students.length > 0) {
                             let html = '';
                             data.students.forEach(student => {
                                 html += `
                                     <tr>
-                                        <td>${student.id}</td>
-                                        <td>${student.full_name}</td>
+                                        <td>${student.id || ''}</td>
+                                        <td>${student.full_name || ''}</td>
                                         <td>${student.nick_name || ''}</td>
                                         <td>${student.age || ''}</td>
                                         <td>${student.parent_name || ''}</td>
@@ -212,14 +235,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     })
                     .catch(error => {
-                        console.error('Error:', error);
+                        console.error('Search error:', error);
                         studentsTableBody.innerHTML = `
                             <tr>
                                 <td colspan="9" class="text-center py-4 text-danger">
-                                    An error occurred while searching. Please try again.
+                                    ${error.message || 'An error occurred while searching. Please try again.'}
                                 </td>
                             </tr>
                         `;
+                        searchResults.style.display = 'none';
+                        paginationContainer.style.display = 'none';
                     });
             } else {
                 // If search is empty, reload the page to show all students
