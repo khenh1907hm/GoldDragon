@@ -6,7 +6,7 @@ ob_start();
     <div class="card dashboard-card">
         <div class="card-body">
             <h2 class="h3 mb-4">Edit Student</h2>
-              <form action="index.php?page=students&action=update&id=<?php echo htmlspecialchars($student['id']); ?>" method="POST">
+              <form action="index.php?page=students/update&id=<?php echo htmlspecialchars($student['id']); ?>" method="POST">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="full_name" class="form-label">Full Name</label>
@@ -52,7 +52,7 @@ ob_start();
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <a href="index.php?action=students" class="btn btn-secondary">Cancel</a>
+                    <a href="index.php?page=students" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Update Student</button>
                 </div>
             </form>

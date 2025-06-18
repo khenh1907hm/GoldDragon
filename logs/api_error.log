@@ -137,3 +137,150 @@
 
 [14-Jun-2025 11:02:29 Europe/Berlin] Preparing to send registration notification email
 [14-Jun-2025 11:02:34 Europe/Berlin] Registration notification email sent successfully
+[18-Jun-2025 17:54:23 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 17:54:23 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 17:54:23 Europe/Berlin] API Error: Invalid endpoint
+#0 {main}
+[18-Jun-2025 17:57:48 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 17:57:48 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 17:57:48 Europe/Berlin] API Error: Invalid endpoint
+#0 {main}
+[18-Jun-2025 17:57:50 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 17:57:50 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 17:57:50 Europe/Berlin] API Error: Invalid endpoint
+#0 {main}
+[18-Jun-2025 17:58:06 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 17:58:06 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 17:58:06 Europe/Berlin] API Error: Invalid endpoint
+#0 {main}
+[18-Jun-2025 17:59:42 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 17:59:42 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:05:33 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:05:33 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:09:37 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:09:37 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:29:20 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:29:20 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:31:09 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:31:09 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:31:14 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:31:14 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:40:36 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:40:36 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:40:48 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:40:48 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:42:25 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:42:25 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:44:38 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:44:38 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:45:29 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:45:29 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:45:29 Europe/Berlin] Received headers: Array
+(
+    [Host] => a873-1-55-80-35.ngrok-free.app
+    [User-Agent] => PostmanRuntime/7.43.2
+    [Content-Length] => 96
+    [Accept] => */*
+    [Accept-Encoding] => gzip, deflate, br
+    [Content-Type] => application/json
+    [Postman-Token] => e17d5783-c9d1-45fa-a895-fd82b3fac5ac
+    [X-Api-Key] => hoangminhdeptraicodegioihehe
+    [X-Forwarded-For] => 1.55.80.35
+    [X-Forwarded-Host] => a873-1-55-80-35.ngrok-free.app
+    [X-Forwarded-Proto] => https
+)
+
+[18-Jun-2025 18:45:29 Europe/Berlin] Expected API key: hoangminhdeptraicodegioihehe
+[18-Jun-2025 18:45:29 Europe/Berlin] Received API key: 
+[18-Jun-2025 18:48:30 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:48:30 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 18:48:30 Europe/Berlin] === API Key Validation Debug ===
+[18-Jun-2025 18:48:30 Europe/Berlin] All headers received: Array
+(
+    [Host] => a873-1-55-80-35.ngrok-free.app
+    [User-Agent] => PostmanRuntime/7.43.2
+    [Content-Length] => 106
+    [Accept] => */*
+    [Accept-Encoding] => gzip, deflate, br
+    [Content-Type] => application/json
+    [Postman-Token] => a1d874f2-fec9-489f-a50c-1bd8def8ce6f
+    [X-Api-Key] => hoangminhdeptraicodegioihehe
+    [X-Forwarded-For] => 1.55.80.35
+    [X-Forwarded-Host] => a873-1-55-80-35.ngrok-free.app
+    [X-Forwarded-Proto] => https
+)
+
+[18-Jun-2025 18:48:30 Europe/Berlin] Expected API key: 'hoangminhdeptraicodegioihehe'
+[18-Jun-2025 18:48:30 Europe/Berlin] X-API-Key header not found
+[18-Jun-2025 18:48:30 Europe/Berlin] Available headers: Host, User-Agent, Content-Length, Accept, Accept-Encoding, Content-Type, Postman-Token, X-Api-Key, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto
+[18-Jun-2025 18:52:43 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 18:52:43 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 19:06:20 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 19:06:20 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 19:06:20 Europe/Berlin] Database connection successful
+[18-Jun-2025 19:07:54 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 19:07:54 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 19:07:55 Europe/Berlin] Database connection successful
+[18-Jun-2025 19:10:37 Europe/Berlin] API Request: /RongVang/api/posts.php
+[18-Jun-2025 19:10:37 Europe/Berlin] POST data: Array
+(
+)
+
+[18-Jun-2025 19:10:38 Europe/Berlin] Database connection successful

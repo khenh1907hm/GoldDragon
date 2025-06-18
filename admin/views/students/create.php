@@ -6,7 +6,7 @@ ob_start();
     <div class="card dashboard-card">
         <div class="card-body">
             <h2 class="h3 mb-4">Add New Student</h2>
-              <form action="index.php?page=students&action=store" method="POST">
+              <form action="index.php?page=students/store" method="POST">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="full_name" class="form-label">Full Name</label>

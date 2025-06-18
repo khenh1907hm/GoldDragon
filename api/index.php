@@ -44,25 +44,36 @@ set_error_handler('handleError');
 set_exception_handler('handleException');
 
 try {
-    // Get the request path
+    // Get the requested endpoint
     $request_uri = $_SERVER['REQUEST_URI'];
     $base_path = '/RongVang/api/';
     $endpoint = str_replace($base_path, '', $request_uri);
     
+    // Remove query string if exists
+    $endpoint = strtok($endpoint, '?');
+
     // Log the request
     error_log("API Request: " . $request_uri);
     error_log("POST data: " . print_r($_POST, true));
 
-    // Route the request
+    // Route to appropriate handler
     switch ($endpoint) {
+        case 'posts.php':
+            require_once __DIR__ . '/posts.php';
+            break;
         case 'register':
             require_once __DIR__ . '/../controllers/RegistrationController.php';
             $controller = new RegistrationController();
             $controller->register();
             break;
-            
         default:
-            throw new Exception('Invalid endpoint');
+            http_response_code(404);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid endpoint',
+                'debug' => 'Endpoint not found: ' . $endpoint
+            ]);
+            break;
     }
 } catch (Exception $e) {
     error_log("API Error: " . $e->getMessage() . "\n" . $e->getTraceAsString());

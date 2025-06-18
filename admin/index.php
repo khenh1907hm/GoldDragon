@@ -104,7 +104,13 @@ try {
 
     // Get content based on page
     ob_start();
-    switch ($page) {
+    
+    // Split the page parameter to handle sub-pages
+    $pageParts = explode('/', $page);
+    $mainPage = $pageParts[0];
+    $subPage = $pageParts[1] ?? null;
+
+    switch ($mainPage) {
         case 'dashboard':
             include 'views/dashboard.php';
             break;
@@ -133,7 +139,41 @@ try {
             }
             break;
         case 'students':
-            include 'views/students.php';
+            if ($subPage === 'create') {
+                include 'views/students/create.php';
+            } elseif ($subPage === 'edit') {
+                if (isset($_GET['id'])) {
+                    $studentController->edit($_GET['id']);
+                } else {
+                    $_SESSION['error'] = "ID học sinh không hợp lệ!";
+                    header('Location: index.php?page=students');
+                    exit();
+                }
+            } elseif ($subPage === 'store') {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $result = $studentController->store($_POST);
+                    if ($result) {
+                        $_SESSION['success'] = "Học sinh đã được thêm thành công!";
+                    } else {
+                        $_SESSION['error'] = "Không thể thêm học sinh. Vui lòng thử lại.";
+                    }
+                    header('Location: index.php?page=students');
+                    exit();
+                }
+            } elseif ($subPage === 'update') {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'])) {
+                    $result = $studentController->update($_GET['id'], $_POST);
+                    if ($result) {
+                        $_SESSION['success'] = "Thông tin học sinh đã được cập nhật thành công!";
+                    } else {
+                        $_SESSION['error'] = "Không thể cập nhật thông tin học sinh. Vui lòng thử lại.";
+                    }
+                    header('Location: index.php?page=students');
+                    exit();
+                }
+            } else {
+                include 'views/students.php';
+            }
             break;
         case 'registrations':
             include 'views/registrations.php';

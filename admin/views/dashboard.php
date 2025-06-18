@@ -9,283 +9,271 @@ $weekInfo = $menu->getCurrentWeekInfo();
 <!-- Required Libraries -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="dashboard-container">
-    <!-- Header -->
-    <div class="dashboard-header">
-        <h2>Bảng điều khiển</h2>
-        <div class="date-info">
-            <i class="fas fa-calendar-alt"></i>
-            <?php echo date('d/m/Y'); ?>
+<div class="container py-4">
+    <div class="row g-4 mb-4">
+        <!-- Card: Page Views (Gauge, Large, Left) -->
+        <div class="col-md-8">
+            <div class="card shadow-sm" style="min-height:220px;">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center p-4 pb-2">
+                    <h6 class="card-title mb-2 fs-2 fw-bold"><i class="fas fa-eye text-info me-2"></i>Page Views</h6>
+                    <div class="display-3 fw-bold text-primary mb-2" id="pageViewsNumber">1,234,567</div>
+                    <canvas id="pageViewsChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Stack the other cards vertically in col-md-4 -->
+        <div class="col-md-4 d-flex flex-column gap-3">
+            <div class="card shadow-sm flex-fill">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center p-3">
+                    <h6 class="card-title mb-2 fs-6"><i class="fas fa-chart-bar text-secondary me-2"></i>Sessions</h6>
+                    <canvas id="sessionsChart" height="50"></canvas>
+                </div>
+            </div>
+            <div class="card shadow-sm flex-fill">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center p-3">
+                    <h6 class="card-title mb-2 fs-6"><i class="fas fa-user-plus text-success me-2"></i>New Users</h6>
+                    <div class="display-5 fw-bold text-dark mb-1" id="newUsersNumber">342,453</div>
+                    <div class="text-success fw-semibold fs-6">+34.5%</div>
+                </div>
+            </div>
+            <div class="card shadow-sm flex-fill">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center p-3">
+                    <h6 class="card-title mb-2 fs-6"><i class="fas fa-mobile-alt text-primary me-2"></i>Device Sessions</h6>
+                    <canvas id="deviceSessionsChart" height="50"></canvas>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Main Content -->
-    <div class="dashboard-content">
-        <!-- Statistics Table -->
-        <div class="table-section">
-            <div class="section-header">
-                <h3>Thống kê</h3>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Chỉ số</th>
-                            <th>Giá trị</th>
-                            <th>Xu hướng</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <i class="fas fa-newspaper text-primary"></i>
-                                Tổng số bài viết
-                            </td>
-                            <td class="fw-bold"><?php echo $totalPosts; ?></td>
-                            <td class="text-success">
-                                <i class="fas fa-arrow-up"></i> 12%
-                            </td>
-                            <td>
-                                <a href="index.php?page=posts" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i> Xem
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <i class="fas fa-graduation-cap text-success"></i>
-                                Học sinh
-                            </td>
-                            <td class="fw-bold"><?php echo $totalStudents; ?></td>
-                            <td class="text-success">
-                                <i class="fas fa-arrow-up"></i> 8%
-                            </td>
-                            <td>
-                                <a href="index.php?page=students" class="btn btn-sm btn-outline-success">
-                                    <i class="fas fa-eye"></i> Xem
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <i class="fas fa-clipboard-list text-info"></i>
-                                Đăng ký mới
-                            </td>
-                            <td class="fw-bold"><?php echo $totalRegistrations; ?></td>
-                            <td class="text-success">
-                                <i class="fas fa-arrow-up"></i> 15%
-                            </td>
-                            <td>
-                                <a href="index.php?page=registrations" class="btn btn-sm btn-outline-info">
-                                    <i class="fas fa-eye"></i> Xem
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <i class="fas fa-utensils text-warning"></i>
-                                Thực đơn
-                            </td>
-                            <td class="fw-bold"><?php echo $totalMenus; ?></td>
-                            <td class="text-muted">
-                                <i class="fas fa-sync"></i> Cập nhật
-                            </td>
-                            <td>
-                                <a href="index.php?page=menus" class="btn btn-sm btn-outline-warning">
-                                    <i class="fas fa-eye"></i> Xem
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    <div class="row g-4 mb-4">
+        <!-- Card: Tổng số bài viết -->
+        <div class="col-md-3">
+            <div class="card shadow-sm" style="background: #f5f6fa; color: #222;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-newspaper fa-2x me-3 text-secondary"></i>
+                        <div>
+                            <div class="fs-3 fw-bold"><?php echo $totalPosts; ?></div>
+                            <div class="small">Bài viết</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Menu Table -->
-        <div class="table-section">
-            <div class="section-header">
-                <h3>Thực đơn tuần này</h3>
-                <a href="index.php?page=menus" class="btn btn-primary btn-sm">
-                    <i class="fas fa-edit"></i> Quản lý thực đơn
-                </a>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Thứ</th>
-                            <th>Bữa sáng</th>
-                            <th>Bữa trưa</th>
-                            <th>Bữa xế</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
-                        $dayNames = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6'];
-                        foreach ($days as $index => $day):
-                            if (isset($currentWeekMenu[$day])):
-                        ?>
-                        <tr>
-                            <td class="fw-bold"><?php echo $dayNames[$index]; ?></td>
-                            <td><?php echo htmlspecialchars($currentWeekMenu[$day]['breakfast']); ?></td>
-                            <td><?php echo htmlspecialchars($currentWeekMenu[$day]['lunch']); ?></td>
-                            <td><?php echo htmlspecialchars($currentWeekMenu[$day]['snack']); ?></td>
-                        </tr>
-                        <?php
-                            endif;
-                        endforeach;
-                        ?>
-                    </tbody>
-                </table>
+        <!-- Card: Tổng số học sinh -->
+        <div class="col-md-3">
+            <div class="card shadow-sm" style="background: #e8f5e9; color: #222;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-graduation-cap fa-2x me-3 text-success"></i>
+                        <div>
+                            <div class="fs-3 fw-bold"><?php echo $totalStudents; ?></div>
+                            <div class="small">Học sinh</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Recent Activities -->
-        <div class="table-section">
-            <div class="section-header">
-                <h3>Hoạt động gần đây</h3>
+        <!-- Card: Đăng ký mới -->
+        <div class="col-md-3">
+            <div class="card shadow-sm" style="background: #ede7f6; color: #222;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-clipboard-list fa-2x me-3 text-primary"></i>
+                        <div>
+                            <div class="fs-3 fw-bold"><?php echo $totalRegistrations; ?></div>
+                            <div class="small">Đăng ký mới</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Thời gian</th>
-                            <th>Hoạt động</th>
-                            <th>Chi tiết</th>
-                            <th>Trạng thái</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>10:30 - 20/03/2024</td>
-                            <td>Đăng ký mới</td>
-                            <td>Nguyễn Văn A - Lớp 1</td>
-                            <td><span class="badge bg-success">Hoàn thành</span></td>
-                        </tr>
-                        <tr>
-                            <td>09:15 - 20/03/2024</td>
-                            <td>Cập nhật thực đơn</td>
-                            <td>Tuần 12 - 2024</td>
-                            <td><span class="badge bg-info">Đã cập nhật</span></td>
-                        </tr>
-                        <tr>
-                            <td>14:20 - 19/03/2024</td>
-                            <td>Đăng bài viết</td>
-                            <td>Thông báo lễ hội mùa xuân</td>
-                            <td><span class="badge bg-primary">Đã đăng</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+        </div>
+        <!-- Card: Thực đơn -->
+        <div class="col-md-3">
+            <div class="card shadow-sm" style="background: #fff3e0; color: #222;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-utensils fa-2x me-3 text-warning"></i>
+                        <div>
+                            <div class="fs-3 fw-bold"><?php echo $totalMenus; ?></div>
+                            <div class="small">Thực đơn</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Weekly Menu & Recent Activities (keep original, but below) -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-light fw-bold">Thực đơn tuần này</div>
+                <div class="card-body">
+                    <table class="table table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Thứ</th>
+                                <th>Bữa sáng</th>
+                                <th>Bữa trưa</th>
+                                <th>Bữa xế</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+                            $dayNames = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6'];
+                            foreach ($days as $index => $day):
+                                if (isset($currentWeekMenu[$day])):
+                            ?>
+                            <tr>
+                                <td class="fw-bold"><?php echo $dayNames[$index]; ?></td>
+                                <td><?php echo htmlspecialchars($currentWeekMenu[$day]['breakfast']); ?></td>
+                                <td><?php echo htmlspecialchars($currentWeekMenu[$day]['lunch']); ?></td>
+                                <td><?php echo htmlspecialchars($currentWeekMenu[$day]['snack']); ?></td>
+                            </tr>
+                            <?php
+                                endif;
+                            endforeach;
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-light fw-bold">Hoạt động gần đây</div>
+                <div class="card-body">
+                    <table class="table table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Thời gian</th>
+                                <th>Hoạt động</th>
+                                <th>Chi tiết</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10:30 - 20/03/2024</td>
+                                <td>Đăng ký mới</td>
+                                <td>Nguyễn Văn A - Lớp 1</td>
+                                <td><span class="badge bg-success">Hoàn thành</span></td>
+                            </tr>
+                            <tr>
+                                <td>09:15 - 20/03/2024</td>
+                                <td>Cập nhật thực đơn</td>
+                                <td>Tuần 12 - 2024</td>
+                                <td><span class="badge bg-info">Đã cập nhật</span></td>
+                            </tr>
+                            <tr>
+                                <td>14:20 - 19/03/2024</td>
+                                <td>Đăng bài viết</td>
+                                <td>Thông báo lễ hội mùa xuân</td>
+                                <td><span class="badge bg-primary">Đã đăng</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+// Chart.js - Sessions (Bar)
+new Chart(document.getElementById('sessionsChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        datasets: [{
+            label: 'Sessions',
+            data: [12, 19, 14, 17, 20],
+            backgroundColor: '#4e73df',
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } },
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+// Chart.js - Page Views (Doughnut as Gauge)
+new Chart(document.getElementById('pageViewsChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Direct', 'Referral', 'Social', 'Organic'],
+        datasets: [{
+            data: [30, 20, 15, 35],
+            backgroundColor: ['#f6c23e', '#36b9cc', '#1cc88a', '#4e73df'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        cutout: '70%',
+        plugins: { legend: { display: false } },
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+// Chart.js - Device Sessions (Horizontal Bar)
+new Chart(document.getElementById('deviceSessionsChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Mobile', 'Tablet', 'Desktop'],
+        datasets: [{
+            label: 'Sessions',
+            data: [60, 25, 15],
+            backgroundColor: ['#36b9cc', '#1cc88a', '#858796'],
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, grid: { display: false } }, y: { grid: { display: false } } },
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+</script>
+
 <style>
-.dashboard-container {
-    padding: 1rem;
+body {
+    background: #f8f9fc;
 }
-
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e3e6f0;
+.card {
+    border: none;
+    border-radius: 1rem;
 }
-
-.dashboard-header h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #2e59d9;
-}
-
-.date-info {
-    color: #6c757d;
-    font-size: 0.9rem;
-}
-
-.date-info i {
-    margin-right: 0.5rem;
-}
-
-.table-section {
-    background: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-    margin-bottom: 1.5rem;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #e3e6f0;
-}
-
-.section-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #2e59d9;
-}
-
-.table {
-    margin-bottom: 0;
-}
-
-.table th {
-    background-color: #f8f9fc;
+.card .card-title {
+    font-size: 1rem;
     font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.75rem;
+    color: #343a40;
 }
-
-.table td {
-    padding: 0.75rem;
-    vertical-align: middle;
+.display-3 {
+    font-size: 3.5rem;
 }
-
-.table td i {
-    margin-right: 0.5rem;
-    width: 1.25rem;
-    text-align: center;
+.display-5 {
+    font-size: 2.8rem;
 }
-
-.btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
+.display-6 {
+    font-size: 2.5rem;
 }
-
-.badge {
-    padding: 0.5em 0.75em;
-    font-weight: 500;
+.bg-light {
+    background: #f8f9fc !important;
 }
-
-@media (max-width: 768px) {
-    .dashboard-header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .date-info {
-        margin-top: 0.5rem;
-    }
-
-    .section-header {
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: center;
-    }
-
-    .table td, .table th {
-        padding: 0.5rem;
-    }
+.table th {
+    background: #f8f9fc;
+}
+.card-body canvas {
+    max-height: 320px !important;
+}
+@media (max-width: 991.98px) {
+    .col-md-8, .col-md-4 { flex: 0 0 100%; max-width: 100%; }
+    .gap-3 > * { margin-bottom: 1rem !important; }
 }
 </style>

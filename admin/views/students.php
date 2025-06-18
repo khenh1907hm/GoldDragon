@@ -16,6 +16,10 @@ $totalStudents = $student->count($search);
 $totalPages = ceil($totalStudents / $limit);
 ?>
 
+<!-- Add SweetAlert2 CSS and JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="h3 mb-0">Student Management</h2>
@@ -28,20 +32,39 @@ $totalPages = ceil($totalStudents / $limit);
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <a href="index.php?page=students&action=create" class="btn btn-primary">
+            <a href="export_students.php" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Xuất Excel
+            </a>
+            <a href="index.php?page=students/create" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add New Student
             </a>
         </div>
     </div>
 
     <?php if (isset($_SESSION['success'])): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?php 
-                echo $_SESSION['success'];
-                unset($_SESSION['success']);
-            ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '<?php echo $_SESSION['success']; ?>',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['error'])): ?>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '<?php echo $_SESSION['error']; ?>',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+        <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
 
     <div id="searchResults" class="alert alert-info" style="display: none;"></div>
@@ -83,7 +106,7 @@ $totalPages = ceil($totalStudents / $limit);
                                     <td><?php echo htmlspecialchars($student['notes'] ?? ''); ?></td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="index.php?page=students&action=edit&id=<?php echo $student['id']; ?>" 
+                                            <a href="index.php?page=students/edit&id=<?php echo $student['id']; ?>" 
                                                class="btn btn-sm btn-outline-primary" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
@@ -135,9 +158,20 @@ $totalPages = ceil($totalStudents / $limit);
 
 <script>
 function confirmDelete(id) {
-    if (confirm('Are you sure you want to delete this student?')) {
-        window.location.href = 'index.php?page=students&action=delete&id=' + id;
-    }
+    Swal.fire({
+        title: 'Bạn có chắc chắn?',
+        text: "Bạn không thể hoàn tác sau khi xóa!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Có, xóa nó!',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'index.php?page=students&action=delete&id=' + id;
+        }
+    });
 }
 
 // Real-time search functionality
@@ -170,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
-                            <div class="mt-2">Searching...</div>
+                            <div class="mt-2">Đang tìm kiếm...</div>
                         </td>
                     </tr>
                 `;
@@ -205,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         <td>${student.notes || ''}</td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="index.php?page=students&action=edit&id=${student.id}" 
+                                                <a href="index.php?page=students/edit&id=${student.id}" 
                                                    class="btn btn-sm btn-outline-primary" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
@@ -226,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             studentsTableBody.innerHTML = `
                                 <tr>
                                     <td colspan="9" class="text-center py-4">
-                                        No students found matching your search.
+                                        Không tìm thấy học sinh nào phù hợp với tìm kiếm của bạn.
                                     </td>
                                 </tr>
                             `;
@@ -236,13 +270,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .catch(error => {
                         console.error('Search error:', error);
-                        studentsTableBody.innerHTML = `
-                            <tr>
-                                <td colspan="9" class="text-center py-4 text-danger">
-                                    ${error.message || 'An error occurred while searching. Please try again.'}
-                                </td>
-                            </tr>
-                        `;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi!',
+                            text: error.message || 'Có lỗi xảy ra khi tìm kiếm. Vui lòng thử lại.',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
                         searchResults.style.display = 'none';
                         paginationContainer.style.display = 'none';
                     });
