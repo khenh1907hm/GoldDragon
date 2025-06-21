@@ -91,6 +91,56 @@ try {
         }
     }
 
+    // Handle post actions
+    if ($action === 'post_delete' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $postId = $_POST['id'] ?? null;
+        if ($postId) {
+            $result = $postController->delete($postId);
+            if ($result) {
+                $_SESSION['success'] = "Post deleted successfully!";
+            } else {
+                $_SESSION['error'] = "Failed to delete post. Please try again.";
+            }
+        }
+        header('Location: index.php?page=posts');
+        exit();
+    }
+
+    // Handle post status toggle
+    if ($action === 'toggle_status' && isset($_GET['id'])) {
+        $postId = $_GET['id'];
+        $result = $postController->toggleStatus($postId);
+        if ($result) {
+            $_SESSION['success'] = "Post status updated successfully!";
+        } else {
+            $_SESSION['error'] = "Failed to update post status. Please try again.";
+        }
+        header('Location: index.php?page=posts');
+        exit();
+    }
+
+    // Handle registration operations
+    if ($action === 'registrations' && $operation === 'update-status' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $registrationId = $_POST['id'] ?? null;
+        $status = $_POST['status'] ?? 'approved';
+        
+        if ($registrationId) {
+            // Sử dụng model Registration thay vì controller
+            require_once __DIR__ . '/../models/Registration.php';
+            $db = Database::getInstance()->getConnection();
+            $registrationModel = new Registration($db);
+            
+            $result = $registrationModel->updateStatus($registrationId, $status);
+            if ($result) {
+                $_SESSION['success'] = "Registration status updated successfully!";
+            } else {
+                $_SESSION['error'] = "Failed to update registration status. Please try again.";
+            }
+        }
+        header('Location: index.php?page=registrations');
+        exit();
+    }
+
     // Set page title
     $_SESSION['page_title'] = ucfirst($page);
 
@@ -130,6 +180,69 @@ try {
                     break;
                 case 'edit':
                     require_once __DIR__ . '/views/edit_menu.php';
+                    break;
+                case 'check':
+                    // AJAX action to check if menu exists for a week
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        header('Content-Type: application/json');
+                        $startDate = $_POST['start_date'] ?? '';
+                        $endDate = $_POST['end_date'] ?? '';
+                        
+                        if (!empty($startDate) && !empty($endDate)) {
+                            // Sử dụng model Menu trực tiếp
+                            require_once __DIR__ . '/../models/Menu.php';
+                            $menuModel = new Menu();
+                            $menu = $menuModel->getByDateRange($startDate, $endDate);
+                            if ($menu) {
+                                echo json_encode([
+                                    'exists' => true,
+                                    'menu' => $menu
+                                ]);
+                            } else {
+                                echo json_encode([
+                                    'exists' => false,
+                                    'menu' => null
+                                ]);
+                            }
+                        } else {
+                            echo json_encode([
+                                'exists' => false,
+                                'menu' => null
+                            ]);
+                        }
+                        exit();
+                    }
+                    break;
+                case 'get':
+                    // AJAX action to get menu by ID
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        header('Content-Type: application/json');
+                        $menuId = $_POST['id'] ?? '';
+                        
+                        if (!empty($menuId)) {
+                            // Sử dụng model Menu trực tiếp
+                            require_once __DIR__ . '/../models/Menu.php';
+                            $menuModel = new Menu();
+                            $menu = $menuModel->getById($menuId);
+                            if ($menu) {
+                                echo json_encode([
+                                    'success' => true,
+                                    'menu' => $menu
+                                ]);
+                            } else {
+                                echo json_encode([
+                                    'success' => false,
+                                    'message' => 'Menu not found'
+                                ]);
+                            }
+                        } else {
+                            echo json_encode([
+                                'success' => false,
+                                'message' => 'Invalid menu ID'
+                            ]);
+                        }
+                        exit();
+                    }
                     break;
                 default:
                     // Lấy danh sách thực đơn

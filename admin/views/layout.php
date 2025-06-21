@@ -16,6 +16,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="assets/css/admin.css" rel="stylesheet">
+    <!-- Pagination CSS -->
+    <link href="assets/css/pagination.css" rel="stylesheet">
     <!-- Quill Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
@@ -78,5 +80,6 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/admin.js"></script>
+    <script src="assets/js/pagination.js"></script>
 </body>
 </html>

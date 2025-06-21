@@ -1,5 +1,27 @@
 <?php
-$registrations = $registrationController->getAll();
+require_once __DIR__ . '/../../includes/Pagination.php';
+require_once __DIR__ . '/../../models/Registration.php';
+require_once __DIR__ . '/../../includes/Database.php';
+
+// Khởi tạo model Registration với database connection mới
+$db = Database::getInstance()->getConnection();
+$registrationModel = new Registration($db);
+
+// Get current page and filters
+$currentPage = isset($_GET['page_num']) ? (int)$_GET['page_num'] : 1;
+$currentPage = max(1, $currentPage);
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$status = isset($_GET['status']) ? trim($_GET['status']) : '';
+
+// Get registrations with pagination and filters
+$result = $registrationModel->read($currentPage, $search, $status);
+$registrations = $result ? $result->fetchAll(PDO::FETCH_ASSOC) : [];
+
+// Get pagination object
+$pagination = $registrationModel->getPagination($currentPage, $search, $status);
+
+// Get statistics
+$stats = $registrationModel->getStats();
 ?>
 
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -12,26 +34,90 @@ $registrations = $registrationController->getAll();
         <p class="text-gray-600 mt-1">Quản lý các đăng ký nhập học của học sinh</p>
     </div>
 
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-full">
+                    <i class="fas fa-users text-blue-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Tổng đăng ký</p>
+                    <p class="text-2xl font-bold text-gray-900"><?php echo $stats['total']; ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="flex items-center">
+                <div class="p-2 bg-yellow-100 rounded-full">
+                    <i class="fas fa-clock text-yellow-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Chờ xử lý</p>
+                    <p class="text-2xl font-bold text-gray-900"><?php echo $stats['pending']; ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="flex items-center">
+                <div class="p-2 bg-green-100 rounded-full">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Đã xử lý</p>
+                    <p class="text-2xl font-bold text-gray-900"><?php echo $stats['approved']; ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="flex items-center">
+                <div class="p-2 bg-purple-100 rounded-full">
+                    <i class="fas fa-calendar-day text-purple-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Hôm nay</p>
+                    <p class="text-2xl font-bold text-gray-900"><?php echo $stats['today']; ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Search and Filter -->
     <div class="mb-6 flex flex-wrap justify-between items-center">
         <div class="flex-1 max-w-sm mr-4">
-            <div class="relative">
+            <form method="GET" action="index.php" class="relative">
+                <input type="hidden" name="page" value="registrations">
+                <?php if (!empty($status)): ?>
+                    <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
+                <?php endif; ?>
                 <input type="text" 
-                       id="searchInput" 
+                       name="search"
                        placeholder="Tìm kiếm theo tên, số điện thoại..." 
+                       value="<?php echo htmlspecialchars($search); ?>"
                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            </div>
+                <?php if (!empty($search)): ?>
+                    <a href="index.php?page=registrations<?php echo !empty($status) ? '&status=' . urlencode($status) : ''; ?>" 
+                       class="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-500 hover:text-red-700">
+                        <i class="fas fa-times"></i>
+                    </a>
+                <?php endif; ?>
+            </form>
         </div>
         <div class="flex gap-2 items-center">
-            <select class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option value="">Tất cả trạng thái</option>
-                <option value="pending">Chờ xử lý</option>
-                <option value="approved">Đã xử lý</option>
-            </select>
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                <i class="fas fa-filter mr-2"></i>Lọc
-            </button>
+            <form method="GET" action="index.php" class="flex items-center">
+                <input type="hidden" name="page" value="registrations">
+                <?php if (!empty($search)): ?>
+                    <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+                <?php endif; ?>
+                <select name="status" 
+                        class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        onchange="this.form.submit()">
+                    <option value="all" <?php echo $status === 'all' || empty($status) ? 'selected' : ''; ?>>Tất cả trạng thái</option>
+                    <option value="pending" <?php echo $status === 'pending' ? 'selected' : ''; ?>>Chờ xử lý</option>
+                    <option value="approved" <?php echo $status === 'approved' ? 'selected' : ''; ?>>Đã xử lý</option>
+                </select>
+            </form>
         </div>
     </div>
 
@@ -54,7 +140,11 @@ $registrations = $registrationController->getAll();
                     <?php if (empty($registrations)): ?>
                     <tr>
                         <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                            Không tìm thấy đăng ký nào
+                            <?php if (!empty($search) || !empty($status)): ?>
+                                Không tìm thấy đăng ký nào phù hợp với tiêu chí tìm kiếm.
+                            <?php else: ?>
+                                Không tìm thấy đăng ký nào
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php else: ?>
@@ -136,6 +226,31 @@ $registrations = $registrationController->getAll();
             </table>
         </div>
     </div>
+
+    <!-- Pagination -->
+    <?php if ($pagination->getTotalPages() > 1): ?>
+        <div class="mt-6">
+            <?php 
+            // Convert Tailwind pagination to Bootstrap style for consistency
+            $paginationHtml = $pagination->render([
+                'showInfo' => true,
+                'showFirstLast' => true,
+                'showPrevNext' => true,
+                'maxVisible' => 5,
+                'alignment' => 'center'
+            ]);
+            
+            // Replace Bootstrap classes with Tailwind classes
+            $paginationHtml = str_replace('pagination', 'flex justify-center', $paginationHtml);
+            $paginationHtml = str_replace('page-item', 'mx-1', $paginationHtml);
+            $paginationHtml = str_replace('page-link', 'px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50', $paginationHtml);
+            $paginationHtml = str_replace('active', 'bg-blue-500 text-white border-blue-500', $paginationHtml);
+            $paginationHtml = str_replace('disabled', 'opacity-50 cursor-not-allowed', $paginationHtml);
+            
+            echo $paginationHtml;
+            ?>
+        </div>
+    <?php endif; ?>
 </div>
 
 <!-- Alert Box for Details -->
@@ -190,22 +305,4 @@ function markAsRead(id) {
     }
     return false;
 }
-
-// Search functionality
-document.getElementById('searchInput').addEventListener('input', function(e) {
-    const searchText = e.target.value.toLowerCase();
-    const rows = document.querySelectorAll('tbody tr');
-    
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(searchText) ? '' : 'none';
-    });
-});
-
-// Close alert box when clicking outside
-document.getElementById('detailsAlert').addEventListener('click', function(e) {
-    if (e.target === this) {
-        hideDetails();
-    }
-});
 </script>

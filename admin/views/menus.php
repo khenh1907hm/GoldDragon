@@ -1,9 +1,16 @@
 <?php
-$menu = new Menu();
-$menus = $menu->getAll();
+require_once __DIR__ . '/../../models/Menu.php';
+
+$menuModel = new Menu();
+$menus = $menuModel->getAll();
 
 // Debug log
 error_log("Menus in view: " . print_r($menus, true));
+
+// DEBUG: Hiển thị trực tiếp ra màn hình để kiểm tra dữ liệu
+if (isset($_GET['debug'])) {
+    echo '<pre>$menus = ' . print_r($menus, true) . '</pre>';
+}
 
 // If we have a new menu in session, add it to the list
 if (isset($_SESSION['new_menu'])) {
@@ -103,61 +110,75 @@ $currentWeekMenu = null;
 if (!empty($weeks)) {
     foreach ($weeks as $week) {
         if ($week['is_current']) {
-            $currentWeekMenu = $menu->getByDateRange($week['start_date'], $week['end_date']);
+            $currentWeekMenu = $menuModel->getByDateRange($week['start_date'], $week['end_date']);
             break;
         }
     }
 }
 
-// Format menus for display
+// Format menus for display - sử dụng dữ liệu trực tiếp từ getAll() nếu đã được format
 $formattedMenus = [];
-foreach ($menus as $menu) {
-    if (!empty($menu['start_date']) && !empty($menu['end_date'])) {
-        $startDate = new DateTime($menu['start_date']);
-        $endDate = new DateTime($menu['end_date']);
-        $weekNumber = (int)$startDate->format('W');
-        
-        $formattedMenu = [
-            'id' => $menu['id'],
-            'week_label' => "Tuần $weekNumber (" . $startDate->format('d/m/Y') . " - " . $endDate->format('d/m/Y') . ")",
-            'start_date' => $menu['start_date'],
-            'end_date' => $menu['end_date'],
-            'monday' => [
-                'breakfast' => $menu['monday_breakfast'] ?? '',
-                'lunch' => $menu['monday_lunch'] ?? '',
-                'snack' => $menu['monday_snack'] ?? ''
-            ],
-            'tuesday' => [
-                'breakfast' => $menu['tuesday_breakfast'] ?? '',
-                'lunch' => $menu['tuesday_lunch'] ?? '',
-                'snack' => $menu['tuesday_snack'] ?? ''
-            ],
-            'wednesday' => [
-                'breakfast' => $menu['wednesday_breakfast'] ?? '',
-                'lunch' => $menu['wednesday_lunch'] ?? '',
-                'snack' => $menu['wednesday_snack'] ?? ''
-            ],
-            'thursday' => [
-                'breakfast' => $menu['thursday_breakfast'] ?? '',
-                'lunch' => $menu['thursday_lunch'] ?? '',
-                'snack' => $menu['thursday_snack'] ?? ''
-            ],
-            'friday' => [
-                'breakfast' => $menu['friday_breakfast'] ?? '',
-                'lunch' => $menu['friday_lunch'] ?? '',
-                'snack' => $menu['friday_snack'] ?? ''
-            ]
-        ];
-        
-        // Debug log each formatted menu
-        error_log("Formatted menu: " . print_r($formattedMenu, true));
-        
-        $formattedMenus[] = $formattedMenu;
+if (!empty($menus)) {
+    foreach ($menus as $menuItem) {
+        // Kiểm tra xem menu đã được format chưa
+        if (isset($menuItem['monday']) && is_array($menuItem['monday'])) {
+            // Menu đã được format từ model
+            $formattedMenus[] = $menuItem;
+        } else {
+            // Menu chưa được format, format lại
+            if (!empty($menuItem['start_date']) && !empty($menuItem['end_date'])) {
+                $startDate = new DateTime($menuItem['start_date']);
+                $endDate = new DateTime($menuItem['end_date']);
+                $weekNumber = (int)$startDate->format('W');
+                
+                $formattedMenu = [
+                    'id' => $menuItem['id'],
+                    'week_label' => "Tuần $weekNumber (" . $startDate->format('d/m/Y') . " - " . $endDate->format('d/m/Y') . ")",
+                    'start_date' => $menuItem['start_date'],
+                    'end_date' => $menuItem['end_date'],
+                    'monday' => [
+                        'breakfast' => $menuItem['monday_breakfast'] ?? '',
+                        'lunch' => $menuItem['monday_lunch'] ?? '',
+                        'snack' => $menuItem['monday_snack'] ?? ''
+                    ],
+                    'tuesday' => [
+                        'breakfast' => $menuItem['tuesday_breakfast'] ?? '',
+                        'lunch' => $menuItem['tuesday_lunch'] ?? '',
+                        'snack' => $menuItem['tuesday_snack'] ?? ''
+                    ],
+                    'wednesday' => [
+                        'breakfast' => $menuItem['wednesday_breakfast'] ?? '',
+                        'lunch' => $menuItem['wednesday_lunch'] ?? '',
+                        'snack' => $menuItem['wednesday_snack'] ?? ''
+                    ],
+                    'thursday' => [
+                        'breakfast' => $menuItem['thursday_breakfast'] ?? '',
+                        'lunch' => $menuItem['thursday_lunch'] ?? '',
+                        'snack' => $menuItem['thursday_snack'] ?? ''
+                    ],
+                    'friday' => [
+                        'breakfast' => $menuItem['friday_breakfast'] ?? '',
+                        'lunch' => $menuItem['friday_lunch'] ?? '',
+                        'snack' => $menuItem['friday_snack'] ?? ''
+                    ]
+                ];
+                
+                // Debug log each formatted menu
+                error_log("Formatted menu: " . print_r($formattedMenu, true));
+                
+                $formattedMenus[] = $formattedMenu;
+            }
+        }
     }
 }
 
 // Debug log final formatted menus
 error_log("Final formatted menus in view: " . print_r($formattedMenus, true));
+
+// DEBUG: Hiển thị trực tiếp ra màn hình để kiểm tra dữ liệu
+if (isset($_GET['debug'])) {
+    echo '<pre>$formattedMenus = ' . print_r($formattedMenus, true) . '</pre>';
+}
 ?>
 
 <div class="container-fluid">

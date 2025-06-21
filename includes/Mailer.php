@@ -44,104 +44,75 @@ class Mailer {
             
             // Set email content
             $this->mailer->isHTML(true);
-            $this->mailer->Subject = 'New Registration Notification';
+            $this->mailer->Subject = '[Rong Vang School] New Enrollment Registration';
             
             // Create email body
             $body = "
             <!DOCTYPE html>
-            <html>
+            <html lang='en'>
             <head>
                 <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                 <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        line-height: 1.6;
-                        color: #333;
-                        max-width: 600px;
-                        margin: 0 auto;
-                        padding: 20px;
-                    }
-                    .header {
-                        background-color: #4CAF50;
-                        color: white;
-                        padding: 20px;
-                        text-align: center;
-                        border-radius: 5px 5px 0 0;
-                    }
-                    .content {
-                        background-color: #f9f9f9;
-                        padding: 20px;
-                        border: 1px solid #ddd;
-                        border-radius: 0 0 5px 5px;
-                    }
-                    .info-block {
-                        background-color: white;
-                        padding: 15px;
-                        margin: 10px 0;
-                        border-radius: 5px;
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    }
-                    .label {
-                        font-weight: bold;
-                        color: #4CAF50;
-                        display: inline-block;
-                        width: 150px;
-                    }
-                    .footer {
-                        text-align: center;
-                        margin-top: 20px;
-                        padding-top: 20px;
-                        border-top: 1px solid #ddd;
-                        color: #666;
-                        font-size: 0.9em;
-                    }
+                    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .wrapper { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
+                    .header { background-color: #fca311; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+                    .header h2 { margin: 0; font-size: 24px; }
+                    .content { padding: 20px; }
+                    .content h3 { color: #14213d; border-bottom: 2px solid #fca311; padding-bottom: 5px; }
+                    .info-block { margin-bottom: 15px; }
+                    .info-block p { background-color: #fff; padding: 10px; border-radius: 5px; border-left: 4px solid #e5e5e5; margin: 5px 0; }
+                    .info-block .label { font-weight: bold; color: #14213d; display: inline-block; min-width: 140px; }
+                    .footer { text-align: center; margin-top: 20px; font-size: 0.9em; color: #666; }
                 </style>
             </head>
             <body>
-                <div class='header'>
-                    <h2>Thông Báo Đăng Ký Mới</h2>
-                    <p>Trường Mầm Non Rồng Vàng</p>
+                <div class='wrapper'>
+                    <div class='header'>
+                        <h2>New Enrollment Registration</h2>
+                    </div>
+                    <div class='content'>
+                        <p>Hello Admin,</p>
+                        <p>A new registration has been submitted through the website. Here are the details:</p>
+                        
+                        <h3>Student Information</h3>
+                        <div class='info-block'>
+                            <p><span class='label'>Student's Name:</span> " . htmlspecialchars($registration['student_name']) . "</p>
+                            <p><span class='label'>Nickname:</span> " . htmlspecialchars($registration['nick_name']) . "</p>
+                            <p><span class='label'>Age:</span> " . htmlspecialchars($registration['age']) . "</p>
+                        </div>
+
+                        <h3>Parent/Guardian Information</h3>
+                        <div class='info-block'>
+                            <p><span class='label'>Parent's Name:</span> " . htmlspecialchars($registration['parent_name']) . "</p>
+                            <p><span class='label'>Phone Number:</span> " . htmlspecialchars($registration['phone']) . "</p>
+                            <p><span class='label'>Address:</span> " . htmlspecialchars($registration['address']) . "</p>
+                        </div>
+
+                        <h3>Additional Message</h3>
+                        <div class='info-block'>
+                            <p>" . nl2br(htmlspecialchars($registration['content'])) . "</p>
+                        </div>
+
+                        <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;'>
+
+                        <p><strong>Registration Time:</strong> " . htmlspecialchars($registration['created_at']) . "</p>
+                        <p>Please follow up with the parent as soon as possible.</p>
+                    </div>
+                    <div class='footer'>
+                        <p>&copy; " . date('Y') . " Rong Vang Kindergarten | This is an automated notification.</p>
+                    </div>
                 </div>
-                <div class='content'>
-                    <p>Kính gửi Ban Giám Hiệu,</p>
-                    <p>Chúng tôi vừa nhận được một đăng ký mới từ phụ huynh. Dưới đây là thông tin chi tiết:</p>
-                    
-                    <div class='info-block'>
-                        <p><span class='label'>Họ tên bé:</span> {$registration['student_name']}</p>
-                        <p><span class='label'>Tên thường gọi:</span> {$registration['nick_name']}</p>
-                        <p><span class='label'>Tuổi:</span> {$registration['age']}</p>
-                    </div>
-
-                    <div class='info-block'>
-                        <p><span class='label'>Họ tên phụ huynh:</span> {$registration['parent_name']}</p>
-                        <p><span class='label'>Số điện thoại:</span> {$registration['phone']}</p>
-                        <p><span class='label'>Địa chỉ:</span> {$registration['address']}</p>
-                    </div>
-
-                    <div class='info-block'>
-                        <p><span class='label'>Nội dung:</span></p>
-                        <p>{$registration['content']}</p>
-                    </div>
-
-                    <div class='info-block'>
-                        <p><span class='label'>Thời gian đăng ký:</span> {$registration['created_at']}</p>
-                    </div>
-                </div>
-                <div class='footer'>
-                    <p>Đây là email tự động từ hệ thống đăng ký của Trường Mầm Non Rồng Vàng</p>
-                <h2>New Registration Received</h2>
-                <p><strong>Student Name:</strong> {$registration['student_name']}</p>
-                <p><strong>Nick Name:</strong> {$registration['nick_name']}</p>
-                <p><strong>Age:</strong> {$registration['age']}</p>
-                <p><strong>Parent Name:</strong> {$registration['parent_name']}</p>
-                <p><strong>Phone:</strong> {$registration['phone']}</p>
-                <p><strong>Address:</strong> {$registration['address']}</p>
-                <p><strong>Content:</strong> {$registration['content']}</p>
-                <p><strong>Registration Time:</strong> {$registration['created_at']}</p>
+            </body>
+            </html>
             ";
             
             $this->mailer->Body = $body;
-            $this->mailer->AltBody = strip_tags($body);
+            $this->mailer->AltBody = "New Registration:\n" .
+                                     "Student Name: " . $registration['student_name'] . "\n" .
+                                     "Parent Name: " . $registration['parent_name'] . "\n" .
+                                     "Phone: " . $registration['phone'] . "\n" .
+                                     "Message: " . $registration['content'];
             
             // Send email
             $this->mailer->send();

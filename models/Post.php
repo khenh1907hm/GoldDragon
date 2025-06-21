@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/Database.php';
+require_once __DIR__ . '/../includes/Pagination.php';
 
 class Post {
     private $db;
@@ -15,20 +16,45 @@ class Post {
     }
 
     // Get all posts with pagination
-    public function getAll($page = 1) {
+    public function getAll($page = 1, $search = '', $status = '') {
         try {
             $offset = ($page - 1) * $this->perPage;
             
-            $sql = "SELECT * FROM posts ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+            $sql = "SELECT * FROM posts WHERE 1=1";
+            $params = [];
+            
+            // Add search condition
+            if (!empty($search)) {
+                $sql .= " AND (title LIKE :search OR content LIKE :search)";
+                $params[':search'] = "%$search%";
+            }
+            
+            // Add status filter
+            if (!empty($status) && $status !== 'all') {
+                $sql .= " AND status = :status";
+                $params[':status'] = $status;
+            }
+            
+            $sql .= " ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+            $params[':limit'] = $this->perPage;
+            $params[':offset'] = $offset;
+            
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':limit', $this->perPage, PDO::PARAM_INT);
-            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
             $stmt->execute();
             return $stmt;
         } catch (Exception $e) {
             error_log("Get All Posts Error: " . $e->getMessage());
             return false;
         }
+    }
+
+    // Get pagination object
+    public function getPagination($page = 1, $search = '', $status = '') {
+        $totalItems = $this->count($search, $status);
+        return Pagination::create($totalItems, $this->perPage, $page);
     }
 
     // Get post by ID
@@ -157,11 +183,28 @@ class Post {
         }
     }
 
-    // Get total count of posts
-    public function count() {
+    // Get total count of posts with filters
+    public function count($search = '', $status = '') {
         try {
-            $query = "SELECT COUNT(*) as total FROM posts";
-            $stmt = $this->db->prepare($query);
+            $sql = "SELECT COUNT(*) as total FROM posts WHERE 1=1";
+            $params = [];
+            
+            // Add search condition
+            if (!empty($search)) {
+                $sql .= " AND (title LIKE :search OR content LIKE :search)";
+                $params[':search'] = "%$search%";
+            }
+            
+            // Add status filter
+            if (!empty($status) && $status !== 'all') {
+                $sql .= " AND status = :status";
+                $params[':status'] = $status;
+            }
+            
+            $stmt = $this->db->prepare($sql);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             return $row['total'];
@@ -171,7 +214,7 @@ class Post {
         }
     }
 
-    // Get total pages
+    // Get total pages (deprecated - use getPagination instead)
     public function getTotalPages() {
         return ceil($this->count() / $this->perPage);
     }
@@ -187,6 +230,28 @@ class Post {
         } catch (Exception $e) {
             error_log("Get Recent Posts Error: " . $e->getMessage());
             return [];
+        }
+    }
+
+    // Toggle post status
+    public function toggleStatus($id) {
+        try {
+            $post = $this->getById($id);
+            if (!$post) {
+                return false;
+            }
+            
+            $newStatus = $post['status'] === 'published' ? 'draft' : 'published';
+            
+            $sql = "UPDATE posts SET status = :status WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':status', $newStatus);
+            
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Toggle Post Status Error: " . $e->getMessage());
+            return false;
         }
     }
 }

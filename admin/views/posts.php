@@ -1,17 +1,21 @@
 <?php
 require_once __DIR__ . '/../../models/Post.php';
+require_once __DIR__ . '/../../includes/Pagination.php';
+
 $post = new Post();
 
-// Get current page
+// Get current page and filters
 $currentPage = isset($_GET['page_num']) ? (int)$_GET['page_num'] : 1;
 $currentPage = max(1, $currentPage); // Ensure page is at least 1
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$status = isset($_GET['status']) ? trim($_GET['status']) : '';
 
-// Get posts for current page
-$result = $post->getAll($currentPage);
-$posts = $result->fetchAll(PDO::FETCH_ASSOC);
+// Get posts for current page with filters
+$result = $post->getAll($currentPage, $search, $status);
+$posts = $result ? $result->fetchAll(PDO::FETCH_ASSOC) : [];
 
-// Get total pages
-$totalPages = $post->getTotalPages();
+// Get pagination object
+$pagination = $post->getPagination($currentPage, $search, $status);
 
 $operation = $_GET['op'] ?? '';
 $postId = $_GET['id'] ?? null;
@@ -135,19 +139,37 @@ if ($operation === 'edit' && $postId) {
             <!-- Filters and Search -->
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <div class="input-group">
-                        <input type="text" id="searchPosts" class="form-control" placeholder="Search posts...">
-                        <button class="btn btn-outline-secondary" type="button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
+                    <form method="GET" action="index.php" class="d-flex">
+                        <input type="hidden" name="page" value="posts">
+                        <div class="input-group">
+                            <input type="text" 
+                                   name="search" 
+                                   class="form-control" 
+                                   placeholder="Search posts..." 
+                                   value="<?php echo htmlspecialchars($search); ?>">
+                            <button class="btn btn-outline-secondary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <?php if (!empty($search)): ?>
+                                <a href="index.php?page=posts" class="btn btn-outline-danger">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </form>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <select class="form-select d-inline-block w-auto">
-                        <option value="all">All Status</option>
-                        <option value="published">Published</option>
-                        <option value="draft">Draft</option>
-                    </select>
+                    <form method="GET" action="index.php" class="d-inline-block">
+                        <input type="hidden" name="page" value="posts">
+                        <?php if (!empty($search)): ?>
+                            <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+                        <?php endif; ?>
+                        <select name="status" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                            <option value="all" <?php echo $status === 'all' || empty($status) ? 'selected' : ''; ?>>All Status</option>
+                            <option value="published" <?php echo $status === 'published' ? 'selected' : ''; ?>>Published</option>
+                            <option value="draft" <?php echo $status === 'draft' ? 'selected' : ''; ?>>Draft</option>
+                        </select>
+                    </form>
                 </div>
             </div>
 
@@ -167,7 +189,13 @@ if ($operation === 'edit' && $postId) {
                         <?php if (empty($posts)): ?>
                             <tr>
                                 <td colspan="5" class="text-center py-4">
-                                    <div class="text-muted">No posts found</div>
+                                    <div class="text-muted">
+                                        <?php if (!empty($search) || !empty($status)): ?>
+                                            No posts found matching your criteria.
+                                        <?php else: ?>
+                                            No posts found.
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
                             </tr>
                         <?php else: ?>
@@ -224,24 +252,16 @@ if ($operation === 'edit' && $postId) {
             </div>
 
             <!-- Pagination -->
-            <?php if ($totalPages > 1): ?>
-            <nav class="mt-4" aria-label="Posts navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item <?php echo $currentPage <= 1 ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?page=posts&page_num=<?php echo $currentPage - 1; ?>" tabindex="-1">Previous</a>
-                    </li>
-                    
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?php echo $i === $currentPage ? 'active' : ''; ?>">
-                            <a class="page-link" href="?page=posts&page_num=<?php echo $i; ?>"><?php echo $i; ?></a>
-                        </li>
-                    <?php endfor; ?>
-                    
-                    <li class="page-item <?php echo $currentPage >= $totalPages ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?page=posts&page_num=<?php echo $currentPage + 1; ?>">Next</a>
-                    </li>
-                </ul>
-            </nav>
+            <?php if ($pagination->getTotalPages() > 1): ?>
+                <div class="mt-4">
+                    <?php echo $pagination->render([
+                        'showInfo' => true,
+                        'showFirstLast' => true,
+                        'showPrevNext' => true,
+                        'maxVisible' => 5,
+                        'alignment' => 'center'
+                    ]); ?>
+                </div>
             <?php endif; ?>
         </div>
     </div>
@@ -293,13 +313,8 @@ function deletePost(id) {
 
 // Toggle post status
 function toggleStatus(id) {
-    // Implement status toggle functionality
-    console.log('Toggle status for post:', id);
+    if (confirm('Are you sure you want to toggle the status of this post?')) {
+        window.location.href = 'index.php?page=posts&action=toggle_status&id=' + id;
+    }
 }
-
-// Search functionality
-document.getElementById('searchPosts').addEventListener('keyup', function(e) {
-    // Implement search functionality
-    console.log('Search:', e.target.value);
-});
 </script>

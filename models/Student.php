@@ -13,16 +13,60 @@ class Student {
         }
     }
 
-    // Get all students
-    public function getAll() {
+    // Get all students with pagination and search
+    public function getAll($page = 1, $search = '') {
+        $limit = 10; // Records per page
+        $offset = ($page - 1) * $limit;
+
         try {
-            $sql = "SELECT * FROM students ORDER BY created_at DESC";
+            // Base SQL parts
+            $baseSql = "FROM students";
+            $whereClause = "";
+            $params = [];
+
+            // Build search query
+            if (!empty($search)) {
+                $whereClause = " WHERE full_name LIKE :search OR nick_name LIKE :search OR parent_name LIKE :search OR phone LIKE :search";
+                $params[':search'] = "%$search%";
+            }
+
+            // Get total records for pagination
+            $countSql = "SELECT COUNT(*) " . $baseSql . $whereClause;
+            $countStmt = $this->db->prepare($countSql);
+            $countStmt->execute($params);
+            $totalRecords = (int) $countStmt->fetchColumn();
+            $totalPages = ceil($totalRecords / $limit);
+
+            // Get filtered and paginated records
+            $sql = "SELECT * " . $baseSql . $whereClause . " ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+            
             $stmt = $this->db->prepare($sql);
+
+            // Bind search parameter if it exists
+            if (!empty($search)) {
+                $stmt->bindValue(':search', $params[':search'], PDO::PARAM_STR);
+            }
+            
+            // Bind pagination parameters
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
             $stmt->execute();
-            return $stmt;
+            $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return [
+                'students' => $students,
+                'totalPages' => $totalPages,
+                'currentPage' => $page
+            ];
+
         } catch (Exception $e) {
             error_log("Get All Students Error: " . $e->getMessage());
-            return false;
+            return [
+                'students' => [],
+                'totalPages' => 0,
+                'currentPage' => 1
+            ];
         }
     }
 

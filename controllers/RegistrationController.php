@@ -24,110 +24,91 @@ class RegistrationController {
 
     // Handle new registration from front-end
     public function register() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            try {
-                // Debug: Log received data
-                error_log('Received POST data: ' . print_r($_POST, true));
-                
-                // Get form data
-                $registrationData = [
-                    'student_name' => $_POST['student_name'] ?? '',
-                    'nick_name' => $_POST['nick_name'] ?? '',
-                    'age' => $_POST['age'] ?? '',
-                    'parent_name' => $_POST['parent_name'] ?? '',
-                    'phone' => $_POST['phone'] ?? '',
-                    'address' => $_POST['address'] ?? '',
-                    'content' => $_POST['content'] ?? ''
-                ];
-
-                // Validate required fields
-                $requiredFields = ['student_name', 'nick_name', 'age', 'parent_name', 'phone', 'address', 'content'];
-                $missingFields = [];
-                foreach ($requiredFields as $field) {
-                    if (empty($registrationData[$field])) {
-                        $missingFields[] = $field;
-                    }
-                }
-
-                if (!empty($missingFields)) {
-                    throw new Exception("Missing required fields: " . implode(', ', $missingFields));
-                }
-
-                // Validate phone number
-                if (!preg_match('/^[0-9]{10}$/', $registrationData['phone'])) {
-                    throw new Exception("Invalid phone number format");
-                }
-
-                // Validate age
-                if (!is_numeric($registrationData['age']) || $registrationData['age'] < 0 || $registrationData['age'] > 6) {
-                    throw new Exception("Age must be between 0 and 6");
-                }
-
-                // Begin transaction
-                $this->db->beginTransaction();
-
-                try {
-                    $sql = "INSERT INTO registrations (parent_name, student_name, nick_name, age, phone, address, content, status, created_at) 
-                            VALUES (:parent_name, :student_name, :nick_name, :age, :phone, :address, :content, 'pending', NOW())";
-                    
-                    $stmt = $this->db->prepare($sql);
-                    $stmt->bindParam(':parent_name', $registrationData['parent_name']);
-                    $stmt->bindParam(':student_name', $registrationData['student_name']);
-                    $stmt->bindParam(':nick_name', $registrationData['nick_name']);
-                    $stmt->bindParam(':age', $registrationData['age']);
-                    $stmt->bindParam(':phone', $registrationData['phone']);
-                    $stmt->bindParam(':address', $registrationData['address']);
-                    $stmt->bindParam(':content', $registrationData['content']);
-                    
-                    if (!$stmt->execute()) {
-                        throw new Exception("Failed to save registration");
-                    }
-
-                    // Get the new registration ID
-                    $registrationId = $this->db->lastInsertId();
-                    
-                    // Get the full registration data
-                    $registration = $this->getById($registrationId);
-                    
-                    if (!$registration) {
-                        throw new Exception("Failed to retrieve registration data");
-                    }
-
-                    // Commit transaction
-                    $this->db->commit();
-
-                    // Try to send email notification
-                    try {
-                        $this->mailer->sendNewRegistrationNotification($registration);
-                    } catch (Exception $e) {
-                        // Log email error but don't fail the registration
-                        error_log("Email sending failed: " . $e->getMessage());
-                    }
-                    
-                    echo json_encode([
-                        'success' => true,
-                        'message' => 'Đăng ký thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.'
-                    ]);
-                } catch (Exception $e) {
-                    // Rollback transaction on error
-                    $this->db->rollBack();
-                    throw $e;
-                }
-            } catch (Exception $e) {
-                error_log("Registration Error: " . $e->getMessage());
-                echo json_encode([
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ]);
-            }
-            exit();
-        } else {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Invalid request method'
-            ]);
+        header('Content-Type: application/json');
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405); // Method Not Allowed
+            echo json_encode(['success' => false, 'message' => 'Invalid request method']);
             exit();
         }
+
+        try {
+            $json = file_get_contents('php://input');
+            $data = json_decode($json, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new Exception('Invalid JSON data received');
+            }
+            
+            // Sanitize and prepare data
+            $registrationData = [
+                'student_name' => trim(filter_var($data['student_name'] ?? '', FILTER_SANITIZE_STRING)),
+                'nick_name'    => trim(filter_var($data['nick_name'] ?? '', FILTER_SANITIZE_STRING)),
+                'age'          => filter_var($data['age'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 2, 'max_range' => 6]]),
+                'parent_name'  => trim(filter_var($data['parent_name'] ?? '', FILTER_SANITIZE_STRING)),
+                'phone'        => trim(filter_var($data['phone'] ?? '', FILTER_SANITIZE_STRING)),
+                'address'      => trim(filter_var($data['address'] ?? '', FILTER_SANITIZE_STRING)),
+                'content'      => trim(filter_var($data['content'] ?? '', FILTER_SANITIZE_STRING))
+            ];
+
+            // Validate required fields after sanitization
+            if (empty($registrationData['student_name']) || empty($registrationData['parent_name']) || empty($registrationData['phone']) || empty($registrationData['address']) || empty($registrationData['content'])) {
+                throw new Exception("Vui lòng điền đầy đủ các trường bắt buộc.");
+            }
+            if ($registrationData['age'] === false) {
+                throw new Exception("Tuổi của bé không hợp lệ (phải từ 2 đến 6).");
+            }
+            
+            // Validate phone number format (simple Vietnamese format check)
+            if (!preg_match('/^(0[3|5|7|8|9])[0-9]{8}$/', $registrationData['phone'])) {
+                throw new Exception("Số điện thoại không hợp lệ.");
+            }
+
+            // Begin transaction
+            $this->db->beginTransaction();
+
+            try {
+                $sql = "INSERT INTO registrations (parent_name, student_name, nick_name, age, phone, address, content, status, created_at) 
+                        VALUES (:parent_name, :student_name, :nick_name, :age, :phone, :address, :content, 'pending', NOW())";
+                
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute($registrationData);
+
+                $registrationId = $this->db->lastInsertId();
+                $this->db->commit();
+                
+                // Get full new registration data for email
+                $newRegistration = $this->getById($registrationId);
+
+                // Try to send email notification
+                if ($newRegistration) {
+                    try {
+                        $this->mailer->sendNewRegistrationNotification($newRegistration);
+                    } catch (Exception $e) {
+                        // Log email error but don't fail the registration process
+                        error_log("Email sending failed for registration ID {$registrationId}: " . $e->getMessage());
+                    }
+                }
+                
+                http_response_code(201); // Created
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Đăng ký thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.'
+                ]);
+
+            } catch (Exception $e) {
+                $this->db->rollBack();
+                throw $e; // Rethrow to be caught by the outer catch block
+            }
+        } catch (Exception $e) {
+            http_response_code(400); // Bad Request
+            error_log("Registration Error: " . $e->getMessage());
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+        exit();
     }
 
     // Update registration status

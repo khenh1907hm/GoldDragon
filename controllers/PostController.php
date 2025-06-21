@@ -105,6 +105,20 @@ class PostController {
         }
     }
 
+    // Toggle post status
+    public function toggleStatus($id) {
+        try {
+            $result = $this->post->toggleStatus($id);
+            if (!$result) {
+                throw new Exception("Failed to toggle post status");
+            }
+            return true;
+        } catch (Exception $e) {
+            error_log("Toggle Post Status Error: " . $e->getMessage());
+            return false;
+        }
+    }
+
     // Get total count of posts
     public function count() {
         return $this->post->count();

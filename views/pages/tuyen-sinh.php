@@ -1,57 +1,128 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
-<main class="container mx-auto py-10 flex justify-center items-center min-h-[80vh] bg-gray-50">
-    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl border-2 border-yellow-200 p-8 md:p-12 relative">
-        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-yellow-400 rounded-full w-20 h-20 flex items-center justify-center shadow-lg border-4 border-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 7v-6m0 0l-9-5m9 5l9-5" /></svg>
+<main class="container mx-auto py-12 px-4">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden max-w-4xl mx-auto border border-yellow-200">
+        <div class="bg-yellow-400 p-6 md:p-8 text-white text-center">
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight">Tuyển Sinh Năm Học Mới</h1>
+            <p class="mt-2 text-yellow-100">Cùng bé khôn lớn và khám phá thế giới tại Rồng Vàng</p>
         </div>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-600 text-center mb-8 mt-8 tracking-wide">Đơn Tuyển Sinh</h1>
-        <section class="mb-8">
-            <h2 class="text-xl font-bold text-yellow-700 mb-2">Quy trình nhập học</h2>
-            <ol class="list-decimal list-inside text-gray-700 space-y-1 pl-2">
-                <li>Phụ huynh đăng ký thông tin</li>
-                <li>Nhà trường liên hệ xác nhận</li>
-                <li>Hoàn thiện hồ sơ và nhập học</li>
-            </ol>
-        </section>
-        <section class="mb-4">
-            <h2 class="text-xl font-bold text-yellow-700 mb-2">Đăng ký nhập học</h2>
-            <form id="admissionForm" class="space-y-4" onsubmit="handleRegistration(event)">
-                <input type="text" name="student_name" placeholder="Họ tên bé" required class="w-full px-4 py-2 border border-yellow-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none">
-                <input type="text" name="nick_name" placeholder="Tên gọi ở nhà" class="w-full px-4 py-2 border border-yellow-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <input type="number" name="age" placeholder="Tuổi" min="2" max="6" required class="w-full md:w-32 px-4 py-2 border border-yellow-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none">
-                    <input type="text" name="parent_name" placeholder="Họ tên phụ huynh" required class="flex-1 px-4 py-2 border border-yellow-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none">
+
+        <div class="p-6 md:p-10 grid md:grid-cols-2 gap-10 items-start">
+            <!-- Left Column: Information -->
+            <div class="space-y-8">
+                <div>
+                    <h2 class="text-2xl font-semibold text-yellow-700 mb-3 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                        Quy trình nhập học
+                    </h2>
+                    <ol class="list-decimal list-inside text-gray-600 space-y-2 pl-4 border-l-4 border-yellow-200 py-2">
+                        <li><strong>Đăng ký:</strong> Phụ huynh điền đầy đủ thông tin vào form bên cạnh.</li>
+                        <li><strong>Xác nhận:</strong> Nhà trường sẽ liên hệ lại để xác nhận thông tin và tư vấn.</li>
+                        <li><strong>Hoàn tất hồ sơ:</strong> Phụ huynh chuẩn bị hồ sơ và hoàn tất thủ tục tại trường.</li>
+                        <li><strong>Nhập học:</strong> Bé chính thức trở thành thành viên của gia đình Rồng Vàng!</li>
+                    </ol>
                 </div>
-                <input type="tel" name="phone" placeholder="Số điện thoại" required class="w-full px-4 py-2 border border-yellow-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none">
-                <input type="text" name="address" placeholder="Địa chỉ" class="w-full px-4 py-2 border border-yellow-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none">
-                <textarea name="content" placeholder="Nội dung" rows="3" class="w-full px-4 py-2 border border-yellow-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none"></textarea>
-                <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 rounded-lg shadow transition">Gửi đăng ký</button>
-            </form>
-        </section>
+                <div>
+                    <h2 class="text-2xl font-semibold text-yellow-700 mb-3 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Thông tin cần biết
+                    </h2>
+                    <ul class="list-disc list-inside text-gray-600 space-y-2 pl-4">
+                        <li>Độ tuổi tuyển sinh: 2 - 6 tuổi</li>
+                        <li>Chương trình học chuẩn quốc tế kết hợp Montessori</li>
+                        <li>Cơ sở vật chất hiện đại, an toàn</li>
+                        <li>Đội ngũ giáo viên tận tâm, giàu kinh nghiệm</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Column: Form -->
+            <div>
+                <h2 class="text-2xl font-semibold text-yellow-700 mb-4 text-center md:text-left">Form Đăng Ký Tư Vấn</h2>
+                <form id="admissionForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" name="student_name" placeholder="Họ tên bé" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none transition">
+                        <input type="text" name="nick_name" placeholder="Tên ở nhà (Nickname)" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none transition">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="number" name="age" placeholder="Tuổi của bé" min="2" max="6" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none transition">
+                        <input type="text" name="parent_name" placeholder="Họ tên phụ huynh" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none transition">
+                    </div>
+                    <input type="tel" name="phone" placeholder="Số điện thoại liên hệ" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none transition">
+                    <input type="text" name="address" placeholder="Địa chỉ hiện tại" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none transition">
+                    <textarea name="content" placeholder="Lời nhắn hoặc câu hỏi cho nhà trường..." rows="4" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none transition"></textarea>
+                    
+                    <div id="form-feedback" class="mt-4"></div>
+
+                    <button type="submit" id="submit-button" class="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
+                        <span id="button-text">Gửi Đăng Ký</span>
+                        <svg id="button-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </main>
 <script>
-async function handleRegistration(event) {
+document.getElementById('admissionForm').addEventListener('submit', async function(event) {
     event.preventDefault();
+    
     const form = event.target;
+    const submitButton = document.getElementById('submit-button');
+    const buttonText = document.getElementById('button-text');
+    const buttonSpinner = document.getElementById('button-spinner');
+    const formFeedback = document.getElementById('form-feedback');
+
+    // Show spinner and disable button
+    buttonText.classList.add('hidden');
+    buttonSpinner.classList.remove('hidden');
+    submitButton.disabled = true;
+    formFeedback.innerHTML = '';
+
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+
     try {
-        const response = await fetch('/api/register', {
+        const response = await fetch('/RongVang/api/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
             body: JSON.stringify(data)
         });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'Lỗi không xác định. Vui lòng thử lại.' }));
+            throw new Error(errorData.message || 'Server responded with an error');
+        }
+
         const result = await response.json();
-        if (result.status === 'success') {
-            alert('Cảm ơn bạn đã gửi thông tin! Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.');
+
+        if (result.success) {
+            formFeedback.innerHTML = `<div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
+                <span class="font-medium">Đăng ký thành công!</span> Cảm ơn bạn đã gửi thông tin. Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.
+            </div>`;
             form.reset();
         } else {
-            alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+            formFeedback.innerHTML = `<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                <span class="font-medium">Lỗi!</span> ${result.message || 'Có lỗi xảy ra, vui lòng thử lại.'}
+            </div>`;
         }
+
     } catch (error) {
-        alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+        console.error('Registration Error:', error);
+        formFeedback.innerHTML = `<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+            <span class="font-medium">Lỗi kết nối!</span> Không thể gửi thông tin. Vui lòng kiểm tra lại kết nối mạng và thử lại.
+        </div>`;
+    } finally {
+        // Hide spinner and re-enable button
+        buttonText.classList.remove('hidden');
+        buttonSpinner.classList.add('hidden');
+        submitButton.disabled = false;
     }
-}
+});
 </script>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?> 
