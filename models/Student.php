@@ -26,8 +26,12 @@ class Student {
 
             // Build search query
             if (!empty($search)) {
-                $whereClause = " WHERE full_name LIKE :search OR nick_name LIKE :search OR parent_name LIKE :search OR phone LIKE :search";
-                $params[':search'] = "%$search%";
+                $searchTerm = '%' . strtolower($search) . '%';
+                $whereClause = " WHERE LOWER(full_name) LIKE :search 
+                               OR LOWER(nick_name) LIKE :search 
+                               OR LOWER(parent_name) LIKE :search 
+                               OR LOWER(phone) LIKE :search";
+                $params[':search'] = $searchTerm;
             }
 
             // Get total records for pagination
@@ -42,16 +46,12 @@ class Student {
             
             $stmt = $this->db->prepare($sql);
 
-            // Bind search parameter if it exists
-            if (!empty($search)) {
-                $stmt->bindValue(':search', $params[':search'], PDO::PARAM_STR);
-            }
-            
-            // Bind pagination parameters
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            // Create a new array for the SELECT query's parameters
+            $selectParams = $params;
+            $selectParams[':limit'] = $limit;
+            $selectParams[':offset'] = $offset;
 
-            $stmt->execute();
+            $stmt->execute($selectParams);
             $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             return [

@@ -2,6 +2,10 @@
 require_once __DIR__ . '/../includes/Database.php';
 require_once __DIR__ . '/../includes/Mailer.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 class RegistrationController {
     private $db;
     private $mailer;
@@ -33,22 +37,27 @@ class RegistrationController {
         }
 
         try {
+            // Try to get JSON data
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
 
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new Exception('Invalid JSON data received');
+            if (json_last_error() !== JSON_ERROR_NONE || !$data) {
+                // If not JSON, try to get data from POST (FormData)
+                $data = $_POST;
+                if (empty($data)) {
+                    throw new Exception('Invalid data received');
+                }
             }
             
             // Sanitize and prepare data
             $registrationData = [
-                'student_name' => trim(filter_var($data['student_name'] ?? '', FILTER_SANITIZE_STRING)),
-                'nick_name'    => trim(filter_var($data['nick_name'] ?? '', FILTER_SANITIZE_STRING)),
+                'student_name' => htmlspecialchars(trim($data['student_name'] ?? '')),
+                'nick_name'    => htmlspecialchars(trim($data['nick_name'] ?? '')),
                 'age'          => filter_var($data['age'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 2, 'max_range' => 6]]),
-                'parent_name'  => trim(filter_var($data['parent_name'] ?? '', FILTER_SANITIZE_STRING)),
-                'phone'        => trim(filter_var($data['phone'] ?? '', FILTER_SANITIZE_STRING)),
-                'address'      => trim(filter_var($data['address'] ?? '', FILTER_SANITIZE_STRING)),
-                'content'      => trim(filter_var($data['content'] ?? '', FILTER_SANITIZE_STRING))
+                'parent_name'  => htmlspecialchars(trim($data['parent_name'] ?? '')),
+                'phone'        => htmlspecialchars(trim($data['phone'] ?? '')),
+                'address'      => htmlspecialchars(trim($data['address'] ?? '')),
+                'content'      => htmlspecialchars(trim($data['content'] ?? ''))
             ];
 
             // Validate required fields after sanitization

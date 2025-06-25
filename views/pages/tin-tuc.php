@@ -36,9 +36,9 @@ $recentPosts = $postModel->getRecent(3);
 ?>
 <main class="container mx-auto py-8 px-4">
     <!-- Hero Section -->
-    <div class="text-center mb-12 animate-fade-in">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-green-700 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-800">Tin tức</h1>
-        <h2 class="text-2xl md:text-3xl font-semibold text-green-600 tracking-wide uppercase">Tin tức nhóm trẻ</h2>
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-semibold  mb-4 text-green-700 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-800">Tin tức</h1>
+        <h2 class="text-2xl md:text-3xl  text-green-600 tracking-wide uppercase">Tin tức nhóm trẻ</h2>
         <div class="w-24 h-1 bg-green-500 mx-auto mt-4 rounded-full"></div>
     </div>
     
@@ -127,7 +127,7 @@ $recentPosts = $postModel->getRecent(3);
         </div>
 
         <!-- Sidebar -->
-        <div class="lg:w-1/3 space-y-8">
+        <div class="lg:w-1/3 ">
             <!-- Bài viết mới -->
             <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
                 <h3 class="text-xl font-bold text-green-700 mb-4 flex items-center">

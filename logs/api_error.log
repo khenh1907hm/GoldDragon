@@ -284,3 +284,234 @@
 )
 
 [18-Jun-2025 19:10:38 Europe/Berlin] Database connection successful
+[23-Jun-2025 16:29:47 Europe/Berlin] API Request: /RongVang/api/register
+[23-Jun-2025 16:29:47 Europe/Berlin] POST data: Array
+(
+)
+
+[23-Jun-2025 16:29:47 Europe/Berlin] Database connection successful
+[23-Jun-2025 16:29:47 Europe/Berlin] Mailer initialized successfully
+[23-Jun-2025 16:29:47 Europe/Berlin] Error [8192] Constant FILTER_SANITIZE_STRING is deprecated on line 45 in file C:\xampp\htdocs\RongVang\controllers\RegistrationController.php
+[23-Jun-2025 16:29:51 Europe/Berlin] API Request: /RongVang/api/register
+[23-Jun-2025 16:29:51 Europe/Berlin] POST data: Array
+(
+)
+
+[23-Jun-2025 16:29:51 Europe/Berlin] Database connection successful
+[23-Jun-2025 16:29:51 Europe/Berlin] Mailer initialized successfully
+[23-Jun-2025 16:29:51 Europe/Berlin] Error [8192] Constant FILTER_SANITIZE_STRING is deprecated on line 45 in file C:\xampp\htdocs\RongVang\controllers\RegistrationController.php
+[23-Jun-2025 16:29:51 Europe/Berlin] API Request: /RongVang/api/register
+[23-Jun-2025 16:29:51 Europe/Berlin] POST data: Array
+(
+)
+
+[23-Jun-2025 16:29:52 Europe/Berlin] Database connection successful
+[23-Jun-2025 16:29:52 Europe/Berlin] Mailer initialized successfully
+[23-Jun-2025 16:29:52 Europe/Berlin] Error [8192] Constant FILTER_SANITIZE_STRING is deprecated on line 45 in file C:\xampp\htdocs\RongVang\controllers\RegistrationController.php
+[23-Jun-2025 16:29:52 Europe/Berlin] API Request: /RongVang/api/register
+[23-Jun-2025 16:29:52 Europe/Berlin] POST data: Array
+(
+)
+
+[23-Jun-2025 16:29:52 Europe/Berlin] Database connection successful
+[23-Jun-2025 16:29:52 Europe/Berlin] Mailer initialized successfully
+[23-Jun-2025 16:29:52 Europe/Berlin] Error [8192] Constant FILTER_SANITIZE_STRING is deprecated on line 45 in file C:\xampp\htdocs\RongVang\controllers\RegistrationController.php
+[23-Jun-2025 16:41:35 Europe/Berlin] API Request: /RongVang/api/register
+[23-Jun-2025 16:41:35 Europe/Berlin] POST data: Array
+(
+    [student_name] => dsadas
+    [nick_name] => adsads
+    [age] => 2
+    [parent_name] => hshshahs
+    [phone] => 0839395292
+    [address] => minh's heart
+    [content] => adsads
+)
+
+[23-Jun-2025 16:41:35 Europe/Berlin] Database connection successful
+[23-Jun-2025 16:41:35 Europe/Berlin] Mailer initialized successfully
+[23-Jun-2025 16:41:35 Europe/Berlin] Registration Error: Invalid JSON data received
+[24-Jun-2025 15:45:30 Europe/Berlin] API Request: /RongVang/api/register
+[24-Jun-2025 15:45:30 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => bé
+    [age] => 2
+    [parent_name] => HTH
+    [phone] => 0839993935
+    [address] => ads
+    [content] => dsa
+)
+
+[24-Jun-2025 15:45:30 Europe/Berlin] Database connection successful
+[24-Jun-2025 15:45:30 Europe/Berlin] Mailer initialized successfully
+[24-Jun-2025 15:45:30 Europe/Berlin] Registration Error: Invalid JSON data received
+[25-Jun-2025 15:04:29 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:04:29 Europe/Berlin] POST data: Array
+(
+)
+
+[25-Jun-2025 15:04:29 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:04:29 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:04:29 Europe/Berlin] Error [8192] Constant FILTER_SANITIZE_STRING is deprecated on line 45 in file C:\xampp\htdocs\RongVang\controllers\RegistrationController.php
+[25-Jun-2025 15:04:49 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:04:49 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => bé
+    [age] => 1
+    [parent_name] => ád
+    [phone] => 0839993935
+    [address] => dsa
+    [content] => sad
+)
+
+[25-Jun-2025 15:04:49 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:04:49 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:04:49 Europe/Berlin] Registration Error: Invalid JSON data received
+[25-Jun-2025 15:05:26 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:05:26 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => be 
+    [age] => 1
+    [parent_name] => minh
+    [phone] => 0839993935
+    [address] => 1999
+    [content] => sda
+)
+
+[25-Jun-2025 15:05:26 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:05:26 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:05:26 Europe/Berlin] Registration Error: Invalid JSON data received
+[25-Jun-2025 15:05:33 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:05:33 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => be 
+    [age] => 2
+    [parent_name] => minh
+    [phone] => 0839993935
+    [address] => 1999
+    [content] => sda
+)
+
+[25-Jun-2025 15:05:33 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:05:33 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:05:33 Europe/Berlin] Registration Error: Invalid JSON data received
+[25-Jun-2025 15:05:36 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:05:36 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => be 
+    [age] => 2
+    [parent_name] => minh
+    [phone] => 0839993935
+    [address] => 1999
+    [content] => sda
+)
+
+[25-Jun-2025 15:05:36 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:05:36 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:05:36 Europe/Berlin] Registration Error: Invalid JSON data received
+[25-Jun-2025 15:08:47 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:08:47 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => ve
+    [age] => 1
+    [parent_name] => ád
+    [phone] => 1231654622
+    [address] => 420 
+    [content] => ads
+)
+
+[25-Jun-2025 15:08:47 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:08:47 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:08:47 Europe/Berlin] Error [8192] Constant FILTER_SANITIZE_STRING is deprecated on line 50 in file C:\xampp\htdocs\RongVang\controllers\RegistrationController.php
+[25-Jun-2025 15:11:18 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:11:18 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => bé
+    [age] => 2
+    [parent_name] => HTH
+    [phone] => 0839369595
+    [address] => sad
+    [content] => sad
+)
+
+[25-Jun-2025 15:11:18 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:11:18 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:11:18 Europe/Berlin] Error [8192] Constant FILTER_SANITIZE_STRING is deprecated on line 54 in file C:\xampp\htdocs\RongVang\controllers\RegistrationController.php
+[25-Jun-2025 15:13:24 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:13:24 Europe/Berlin] POST data: Array
+(
+    [student_name] => dung
+    [nick_name] => bé
+    [age] => 2
+    [parent_name] => hshshahs
+    [phone] => 0839993935
+    [address] => sd
+    [content] => sda
+)
+
+[25-Jun-2025 15:13:24 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:13:24 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:13:24 Europe/Berlin] Preparing to send registration notification email
+[25-Jun-2025 15:13:29 Europe/Berlin] Registration notification email sent successfully
+[25-Jun-2025 15:14:02 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:14:02 Europe/Berlin] POST data: Array
+(
+)
+
+[25-Jun-2025 15:14:02 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:14:02 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:14:02 Europe/Berlin] Preparing to send registration notification email
+[25-Jun-2025 15:14:07 Europe/Berlin] Registration notification email sent successfully
+[25-Jun-2025 15:14:29 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:14:29 Europe/Berlin] POST data: Array
+(
+    [student_name] => liên hê
+    [nick_name] => dsa
+    [age] => 2
+    [parent_name] => hshshahs
+    [phone] => 1231654623
+    [address] => 18dong do
+    [content] => sad
+)
+
+[25-Jun-2025 15:14:29 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:14:29 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:14:29 Europe/Berlin] Registration Error: Số điện thoại không hợp lệ.
+[25-Jun-2025 15:14:31 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:14:31 Europe/Berlin] POST data: Array
+(
+    [student_name] => liên hê
+    [nick_name] => dsa
+    [age] => 2
+    [parent_name] => hshshahs
+    [phone] => 1231654623
+    [address] => 18dong do
+    [content] => sad
+)
+
+[25-Jun-2025 15:14:31 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:14:31 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:14:31 Europe/Berlin] Registration Error: Số điện thoại không hợp lệ.
+[25-Jun-2025 15:14:38 Europe/Berlin] API Request: /RongVang/api/register
+[25-Jun-2025 15:14:38 Europe/Berlin] POST data: Array
+(
+    [student_name] => liên hê
+    [nick_name] => dsa
+    [age] => 2
+    [parent_name] => hshshahs
+    [phone] => 0839395292
+    [address] => 18dong do
+    [content] => sad
+)
+
+[25-Jun-2025 15:14:38 Europe/Berlin] Database connection successful
+[25-Jun-2025 15:14:38 Europe/Berlin] Mailer initialized successfully
+[25-Jun-2025 15:14:38 Europe/Berlin] Preparing to send registration notification email
+[25-Jun-2025 15:14:42 Europe/Berlin] Registration notification email sent successfully

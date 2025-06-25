@@ -9,7 +9,7 @@ require_once __DIR__ . '/layouts/header.php'; ?>
         <h4 class="text-lg md:text-xl text-blue-600 font-semibold mb-2 animate" data-animation="fade-in-left">Nơi nuôi dưỡng tài năng tương lai</h4>
         <h1 class="text-3xl md:text-5xl font-extrabold text-blue-900 mb-4 animate" data-animation="fade-in-up">Welcome to Golden Dragon Kindergarten</h1>
         <p class="text-base md:text-lg text-gray-700 mb-6 animate" data-animation="fade-in-up">Chúng tôi cung cấp môi trường học tập an toàn, sáng tạo và đầy cảm hứng cho trẻ em từ 2-6 tuổi</p>
-        <button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-lg shadow animate" data-animation="fade-in-up" onclick="location.href='/RongVang/tuyen-sinh'">Tìm hiểu thêm</button>
+        <button class="bg-[var(--primary-color)] hover:bg-[var(--primary-dark)] text-white font-bold px-8 py-3 rounded-lg shadow animate" data-animation="fade-in-up" onclick="location.href='/RongVang/tuyen-sinh'">Tìm hiểu thêm</button>
     </div>
     <!-- Hero image right -->
     <div class="flex-1 flex items-end justify-center relative w-full mb-4 md:mb-0 min-h-[340px] md:min-h-[440px]">
@@ -35,18 +35,15 @@ require_once __DIR__ . '/layouts/header.php'; ?>
     <h2 class="section-title animate" data-animation="fade-in-up">Hoạt động của nhóm trẻ</h2>
     <div class="slider-container animate" data-animation="scale-in">      
         <div class="slider">
-            <!-- Original slides -->
+            <!-- Original slides lặp 3 lần -->
             <?php
-            $activities = [1, 2, 3, 4, 5, 6, 7, 8];            foreach($activities as $index) {
-                echo '<div class="slide animate" data-animation="fade-in-up">
-                        <img src="/RongVang/asset/img/reason_' . $index . '.jpg" alt="Hoạt động ' . $index . '">
-                    </div>';
-            }
-            // Duplicate for seamless loop
-            foreach($activities as $index) {
-                echo '<div class="slide animate" data-animation="fade-in-up">
-                        <img src="/RongVang/asset/img/reason_' . $index . '.jpg" alt="Hoạt động ' . $index . '">
-                    </div>';
+            $activities = [1, 2, 3, 4, 5, 6, 7, 8];
+            for ($repeat = 0; $repeat < 3; $repeat++) {
+                foreach($activities as $index) {
+                    echo '<div class="slide animate" data-animation="fade-in-up" style="margin:0;padding:0;display:inline-block;">
+                            <img src="/RongVang/asset/img/reason_' . $index . '.jpg" alt="Hoạt động ' . $index . '">
+                        </div>';
+                }
             }
             ?>
         </div>
@@ -57,7 +54,7 @@ require_once __DIR__ . '/layouts/header.php'; ?>
 <?php require_once __DIR__ . '/sections/montessori.php'; ?>
 
 <!-- Include Teachers Section -->
-<?php require_once __DIR__ . '/sections/teachers.php'; ?>
+<?php require_once __DIR__ . '/sections/teachers.php'; ?>s
 
 <!-- Include Contact Section -->
 <?php require_once __DIR__ . '/sections/contact.php'; ?>

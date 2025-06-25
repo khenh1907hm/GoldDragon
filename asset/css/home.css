@@ -2,7 +2,8 @@
   --primary-color: #1976D2;
   --primary-light: #BBDEFB;
   --primary-dark: #0D47A1;
-  --accent-color: #FFC107;
+  --accent-color: #1976D2;
+  --accent-dark: #0D47A1;
 }
 
 body {
@@ -626,13 +627,16 @@ canvas {
 }
 
 .address i {
-  color: var(--accent-color);
+  color: var(--primary-color);
   margin-right: 0.5rem;
 }
 
 .footer-links h3,
-.footer-newsletter h3 {
-  color: var(--accent-color);
+.footer-newsletter h3,
+.social-media strong {
+  color: #FFC107;
+  font-weight: 600;
+  text-shadow: none;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
 }
@@ -651,7 +655,7 @@ canvas {
 }
 
 .footer-links a:hover {
-  color: var(--accent-color);
+  color: var(--primary-color);
 }
 
 .footer-newsletter form {
@@ -673,7 +677,7 @@ canvas {
 }
 
 .footer-newsletter button {
-  background: var(--accent-color);
+  background: var(--primary-color);
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -683,17 +687,11 @@ canvas {
 }
 
 .footer-newsletter button:hover {
-  background: var(--accent-dark);
+  background: var(--primary-dark);
 }
 
 .social-media {
   margin-top: 2rem;
-}
-
-.social-media strong {
-  display: block;
-  margin-bottom: 1rem;
-  color: var(--accent-color);
 }
 
 .social-icons {
@@ -715,7 +713,7 @@ canvas {
 }
 
 .social-icon:hover {
-  background: var(--accent-color);
+  background: var(--primary-color);
   transform: translateY(-3px);
 }
 
@@ -750,37 +748,46 @@ canvas {
 
 .slider {
   display: flex;
-  animation: slide 50s linear infinite;
-  will-change: transform;
+  width: max-content;
+  animation: slideLoop 24s linear infinite;
+  gap: 20px;
 }
 
 .slider:hover {
   animation-play-state: paused;
 }
 
-/* Copy slides to create seamless loop */
-.slider {
-  display: flex;
-}
-
-.slider .slide {
-  flex: 0 0 auto;
+@keyframes slideLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
 }
 
 .slide {
-  width: calc(100vw / 6);
-  padding: 0 1rem;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
+  padding: 0;
+  flex: 0 0 320px;
+  width: 320px;
+  height: 220px;
+  border-radius: 18px;
+  border: 1.5px solid #e3eaf7;
+  box-shadow: 0 6px 24px rgba(25, 118, 210, 0.12);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.slide:last-child {
+  margin-right: 0;
 }
 
 .slide img {
   width: 100%;
-  height: 300px;
+  height: 220px;
   object-fit: cover;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-  transition: transform 0.3s ease;
+  border-radius: 16px;
+  display: block;
+  margin: 0;
 }
 
 .slide:hover {
@@ -790,31 +797,6 @@ canvas {
 .slide:hover img {
   transform: scale(1.1);
   box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-}
-
-@keyframes slide {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);  /* Only move half way since we have duplicated slides */
-  }
-}
-
-/* Duplicate slides for seamless loop */
-.slider {
-  display: flex;
-  width: fit-content;
-}
-
-.slider .slide {
-  animation: scroll 20s linear infinite;
-}
-
-.slider .slide:nth-child(n+7) {
-  position: absolute;
-  opacity: 0;
-  visibility: hidden;
 }
 
 .montessori-section {

@@ -35,7 +35,7 @@
                     <img src="/RongVang/asset/img/logo.png" alt="Golden Dragon Kindergarten">
                     <div class="address">
                         <p><strong>Golden Dragon Kindergarten</strong> - Nơi nuôi dưỡng tài năng tương lai</p>
-                        <p><i class="fas fa-map-marker-alt"></i> 15 Đông Đô, Thị trấn Liên Nghĩa, Đức Trọng, Lâm Đồng</p>
+                        <p><i class="fas fa-map-marker-alt"></i> 616 Đ. Nguyễn Ảnh Thủ, Tân Chánh Hiệp, Quận 12, Hồ Chí Minh, Việt Nam</p>
                         <p><i class="fas fa-phone"></i> 0839395292</p>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                     <h3>Đăng ký nhận tin</h3>
                     <form>
                         <input type="email" placeholder="Email của bạn">
-                        <button type="submit">Đăng ký</button>
+                        <button type="submit" class="bg-[var(--primary-color)] hover:bg-[var(--primary-dark)] text-white font-bold px-4 py-2 rounded-lg transition">Đăng ký</button>
                     </form>
                     <div class="social-media">
                         <strong>Mạng xã hội</strong>

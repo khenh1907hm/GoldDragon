@@ -4,18 +4,26 @@ define('BASE_PATH', __DIR__);
 
 // Router đơn giản
 $request = $_SERVER['REQUEST_URI'];
-// Remove query string and trailing slash
+// Lấy đường dẫn URI hiện tại từ server (ví dụ: /RongVang/tin-tuc?abc=1)
+
 $request = strtok($request, '?');
+// strtok($request, '?'): Cắt chuỗi $request tại dấu '?' đầu tiên, trả về phần trước dấu '?'. Tham số 1: chuỗi nguồn, Tham số 2: ký tự phân tách.
+
 $request = rtrim($request, '/');
+// rtrim($request, '/'): Loại bỏ dấu '/' ở cuối chuỗi $request nếu có. Tham số 1: chuỗi nguồn, Tham số 2: ký tự muốn loại bỏ ở cuối.
 
-$baseUrl = '/RongVang';
+// Tự động lấy base path nếu web nằm trong thư mục con hoặc gốc
+$basePath = dirname($_SERVER['SCRIPT_NAME']);
+if ($basePath === '/' || $basePath === '\\') $basePath = '';
+$baseUrl = $basePath;
 
-// Extract the base part of the URL if the site is in a subdirectory
-$basePath = '/RongVang';
 $request = str_replace($basePath, '', $request);
+// str_replace($basePath, '', $request): Thay thế tất cả $basePath trong $request thành chuỗi rỗng. Tham số 1: chuỗi cần thay, Tham số 2: chuỗi thay thế, Tham số 3: chuỗi nguồn.
+
 if (empty($request)) {
     $request = '/';
 }
+// Kiểm tra nếu $request rỗng thì gán là '/'
 
 // Xử lý route
 switch ($request) {
