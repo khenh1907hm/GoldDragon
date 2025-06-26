@@ -102,3 +102,17 @@ VALUES
     'Bánh mì trứng', 'Cơm thịt kho', 'Trái cây',
     'Phở gà', 'Cơm tôm rim', 'Sữa tươi',
     'Xôi đậu xanh', 'Cơm bò xào', 'Bánh quy');
+
+-- Bảng danh mục ảnh nhóm trẻ
+CREATE TABLE IF NOT EXISTS photo_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+-- Bảng ảnh nhóm trẻ
+CREATE TABLE IF NOT EXISTS photos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES photo_categories(id) ON DELETE CASCADE
+);

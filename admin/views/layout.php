@@ -41,6 +41,16 @@ if (session_status() === PHP_SESSION_NONE) {
                             <i class="fas fa-newspaper me-2"></i>Posts
                         </a>
                     </li>
+                    <!-- Photo Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="photoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-image me-2"></i>Photo
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="photoDropdown">
+                            <li><a class="dropdown-item" href="index.php?page=photos">Quản lý ảnh</a></li>
+                            <li><a class="dropdown-item" href="index.php?page=photos-categories">Danh mục</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?page=menus">
                             <i class="fas fa-utensils me-2"></i>Menus</a>

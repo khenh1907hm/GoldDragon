@@ -29,10 +29,11 @@ session_start();
         </div>
         <nav>
             <a href="/RongVang/">Trang chủ</a>
-            <a href="/RongVang/tin-tuc">Tin tức</a>
+            <!-- <a href="/RongVang/tin-tuc">Tin tức</a> -->
             <a href="/RongVang/lich-hoc">Lịch học</a>
             <a href="/RongVang/thuc-don">Thực đơn</a>
             <a href="/RongVang/ban-tin">Bản tin</a>
+            <a href="/RongVang/anh-nhom-tre">Ảnh nhóm trẻ</a>
             <a href="/RongVang/tuyen-sinh">Tuyển sinh</a>
             <a href="/RongVang/lien-he">Liên hệ</a>
         </nav>
@@ -47,6 +48,7 @@ session_start();
         <a href="/RongVang/lich-hoc">Lịch học</a>
         <a href="/RongVang/thuc-don">Thực đơn</a>
         <a href="/RongVang/ban-tin">Bản tin</a>
+        <a href="/RongVang/anh-nhom-tre">Ảnh nhóm trẻ</a>
         <a href="/RongVang/tuyen-sinh">Tuyển sinh</a>
         <a href="/RongVang/lien-he">Liên hệ</a>
     </div>

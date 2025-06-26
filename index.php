@@ -48,6 +48,10 @@ switch ($request) {
         $pageTitle = 'Bản tin';
         require BASE_PATH . '/views/pages/tin-tuc.php';
         break;
+    case '/anh-nhom-tre':
+        $pageTitle = 'Ảnh nhóm trẻ';
+        require BASE_PATH . '/views/pages/anh-nhom-tre.php';
+        break;
     case '/tuyen-sinh':
         $pageTitle = 'Tuyển sinh';
         require BASE_PATH . '/views/pages/tuyen-sinh.php';

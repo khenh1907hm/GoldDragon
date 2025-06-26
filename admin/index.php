@@ -164,6 +164,39 @@ try {
         case 'dashboard':
             include 'views/dashboard.php';
             break;
+        case 'photos':
+            require_once __DIR__ . '/../controllers/PhotoController.php';
+            $photoController = new PhotoController();
+            if ($subPage === 'categories') {
+                $photoController->categories();
+            } elseif ($subPage === 'create') {
+                $photoController->create();
+            } elseif ($subPage === 'delete' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                $photoController->delete();
+            } else {
+                $photoController->index();
+            }
+            break;
+        case 'photos-categories':
+            require_once __DIR__ . '/../controllers/PhotoController.php';
+            $photoController = new PhotoController();
+            $photoController->categories();
+            break;
+        case 'photos-create':
+            require_once __DIR__ . '/../controllers/PhotoController.php';
+            $photoController = new PhotoController();
+            $photoController->create();
+            break;
+        case 'photos-delete':
+            require_once __DIR__ . '/../controllers/PhotoController.php';
+            $photoController = new PhotoController();
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $photoController->delete();
+            } else {
+                header('Location: index.php?page=photos');
+                exit();
+            }
+            break;
         case 'posts':
             include 'views/posts.php';
             break;
