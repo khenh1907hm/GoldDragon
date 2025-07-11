@@ -44,7 +44,7 @@ session_start();
     <!-- Mobile Menu -->
     <div class="mobile-menu">
         <a href="/RongVang/">Trang chủ</a>
-        <a href="/RongVang/tin-tuc">Tin tức</a>
+        <!-- <a href="/RongVang/tin-tuc">Tin tức</a> -->
         <a href="/RongVang/lich-hoc">Lịch học</a>
         <a href="/RongVang/thuc-don">Thực đơn</a>
         <a href="/RongVang/ban-tin">Bản tin</a>

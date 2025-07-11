@@ -19,7 +19,7 @@ $currentPage = $data['currentPage'];
         <h2 class="h3 mb-0">Student Management</h2>
         <div class="d-flex gap-2">
             <!-- Search Form that submits the page -->
-            <form action="index.php" method="GET" class="d-flex gap-2 mb-0">
+            <form action="index.php" method="GET" class="d-flex gap-2 mb-0 search-form">
                 <input type="hidden" name="page" value="students">
                 <div class="input-group">
                     <input type="text" class="form-control" name="search" placeholder="Search by name or phone..." 

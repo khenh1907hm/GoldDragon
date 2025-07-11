@@ -26,33 +26,45 @@ class Student {
 
             // Build search query
             if (!empty($search)) {
-                $searchTerm = '%' . strtolower($search) . '%';
-                $whereClause = " WHERE LOWER(full_name) LIKE :search 
-                               OR LOWER(nick_name) LIKE :search 
-                               OR LOWER(parent_name) LIKE :search 
-                               OR LOWER(phone) LIKE :search";
+                $searchTerm = '%' . $search . '%';
+                $whereClause = " WHERE LOWER(full_name) LIKE LOWER(:search) 
+                               OR LOWER(nick_name) LIKE LOWER(:search) 
+                               OR LOWER(parent_name) LIKE LOWER(:search) 
+                               OR LOWER(phone) LIKE LOWER(:search)";
                 $params[':search'] = $searchTerm;
             }
+
+            // DEBUG LOG
+            error_log('DEBUG SQL: SELECT * ' . $baseSql . $whereClause . ' ORDER BY created_at DESC LIMIT :limit OFFSET :offset');
+            error_log('DEBUG PARAMS: ' . print_r(['search' => $search ?? '', 'limit' => $limit, 'offset' => $offset], true));
 
             // Get total records for pagination
             $countSql = "SELECT COUNT(*) " . $baseSql . $whereClause;
             $countStmt = $this->db->prepare($countSql);
-            $countStmt->execute($params);
+            foreach ($params as $key => $value) {
+                $countStmt->bindValue($key, $value, PDO::PARAM_STR);
+            }
+            $countStmt->execute();
             $totalRecords = (int) $countStmt->fetchColumn();
             $totalPages = ceil($totalRecords / $limit);
 
             // Get filtered and paginated records
             $sql = "SELECT * " . $baseSql . $whereClause . " ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
-            
             $stmt = $this->db->prepare($sql);
 
-            // Create a new array for the SELECT query's parameters
-            $selectParams = $params;
-            $selectParams[':limit'] = $limit;
-            $selectParams[':offset'] = $offset;
-
-            $stmt->execute($selectParams);
+            // Bind search params
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value, PDO::PARAM_STR);
+            }
+            // Bind limit/offset as integer
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
             $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // DEBUG LOG
+            error_log('DEBUG RESULT COUNT: ' . count($students));
+            error_log('DEBUG RESULT SAMPLE: ' . print_r(array_slice($students, 0, 2), true));
 
             return [
                 'students' => $students,
